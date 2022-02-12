@@ -16,8 +16,10 @@ public class Projectile : MonoBehaviour
     // as a result of the box collider component added to the laser prefab
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // A delegate to be invoked by another scipt whenever a collision occurs
-        this.destroyed.Invoke();
+        if (this.destroyed != null) {
+            // A delegate to be invoked by another scipt whenever a collision occurs
+            this.destroyed.Invoke();
+        }
         // Destory laser object
         Destroy(this.gameObject);
     }

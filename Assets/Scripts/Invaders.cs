@@ -8,13 +8,18 @@ public class Invaders : MonoBehaviour
     public int rows = 5;
     public int columns = 11;
 
+    public Projectile missilePrefab;
     // The speed at which the invaders move based upon the percentage of invaders killed
     public AnimationCurve speed;
     // The inital direction the invaders move
     private Vector3 _direction = Vector2.right;
 
+    // How often there will be missiles
+    public float missileAttackRate = 1.0f;
+
     public int invadersKilled { get; private set; }
     public int totalInvaders => this.rows * this.columns;
+    public int invadersAlive => this.totalInvaders - this.invadersKilled;
     public float percentKilled => (float)this.invadersKilled / (float)this.totalInvaders;
 
     private void Awake()
@@ -39,6 +44,11 @@ public class Invaders : MonoBehaviour
                 invader.transform.localPosition = position;
             }
         }
+    }
+
+    private void Start()
+    {
+        InvokeRepeating(nameof(MissileAttack), this.missileAttackRate, this.missileAttackRate);
     }
 
     private void Update()
@@ -76,6 +86,23 @@ public class Invaders : MonoBehaviour
         Vector3 position = this.transform.position;
         position.y -= 1.0f;
         this.transform.position = position;
+    }
+
+    private void MissileAttack()
+    {
+        foreach (Transform invader in this.transform)
+        {
+            // Checking if the invader is alive / active
+            if (!invader.gameObject.activeInHierarchy) {
+                continue;
+            }
+
+            if (Random.value < (1.0f / (float)this.invadersAlive)) {
+                Instantiate(this.missilePrefab, invader.position, Quaternion.identity);
+                // Only one missile should be active, so break here in order to spawn no more
+                break;
+            }
+        }
     }
  
     private void InvaderKilled()
