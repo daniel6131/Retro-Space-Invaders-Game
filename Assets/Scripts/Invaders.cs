@@ -8,10 +8,14 @@ public class Invaders : MonoBehaviour
     public int rows = 5;
     public int columns = 11;
 
-    // The speed at which the invaders move
-    public float speed = 1.0f;
+    // The speed at which the invaders move based upon the percentage of invaders killed
+    public AnimationCurve speed;
     // The inital direction the invaders move
     private Vector3 _direction = Vector2.right;
+
+    public int invadersKilled { get; private set; }
+    public int totalInvaders => this.rows * this.columns;
+    public float percentKilled => (float)this.invadersKilled / (float)this.totalInvaders;
 
     private void Awake()
     {
@@ -27,6 +31,8 @@ public class Invaders : MonoBehaviour
             for (int col = 0; col < this.columns; col++)
             {
                 Invader invader = Instantiate(this.prefabs[row], this.transform);
+                invader.killed += InvaderKilled;
+                
                 // Offsetting each invader based on the column in which they're positioned
                 Vector3 position = rowPosition;
                 position.x += col * 2.0f;
@@ -37,7 +43,7 @@ public class Invaders : MonoBehaviour
 
     private void Update()
     {
-        this.transform.position += _direction * this.speed * Time.deltaTime;
+        this.transform.position += _direction * this.speed.Evaluate(this.percentKilled) * Time.deltaTime;
 
         // Obtaining the worldspace cooridnates for left and right edges of the game screen
         Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);
@@ -70,5 +76,10 @@ public class Invaders : MonoBehaviour
         Vector3 position = this.transform.position;
         position.y -= 1.0f;
         this.transform.position = position;
+    }
+ 
+    private void InvaderKilled()
+    {
+        this.invadersKilled++;
     }
 }

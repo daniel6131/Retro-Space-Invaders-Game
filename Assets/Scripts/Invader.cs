@@ -6,6 +6,8 @@ public class Invader : MonoBehaviour
     public Sprite[] animationSprites;
     // How often the animation cycles to the next sprite
     public float animationTime = 1.0f;
+    public System.Action killed;
+
     // Reference to change which sprite is being rendered
     private SpriteRenderer _spriteRenderer;
     // Reference to currently used sprite
@@ -32,5 +34,17 @@ public class Invader : MonoBehaviour
         }
 
         _spriteRenderer.sprite = this.animationSprites[_animationFrame];
+    }
+
+    // Handling the collisions between a laser and a invader
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // Checking whether the collision layer is the laser
+        if (other.gameObject.layer == LayerMask.NameToLayer("Laser")) {
+            // A delegate to be invoked by another scipt whenever a collision occurs
+            this.killed.Invoke();
+            // Deactivating/turning off the invader game object
+            this.gameObject.SetActive(false);
+        }
     }
 }
