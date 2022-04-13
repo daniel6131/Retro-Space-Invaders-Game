@@ -7,16 +7,27 @@ public class Player : MonoBehaviour
 
     // Setting player speed
     public float speed = 5.0f;
+    public System.Action killed;
     private bool _laserActive;
 
     private void Update()
     {
+        // Creating a variable holding the current position of the players movement
+        Vector3 position = transform.position;
+        // Finding the left and right boundaries of the viewport
+        Vector3 minLeftBounds = Camera.main.ViewportToWorldPoint(Vector3.zero);
+        Vector3 maxRightBounds = Camera.main.ViewportToWorldPoint(Vector3.right);
+
         // Transform position to left/right if a left/right input is receieved from the user
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
-            this.transform.position += Vector3.left * this.speed * Time.deltaTime;
+            position.x -= speed * Time.deltaTime;
         } else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
-            this.transform.position += Vector3.right * this.speed * Time.deltaTime;
+            position.x += speed * Time.deltaTime;
         }
+
+        // Clamp the position of the user so that their sprite cannot move beyond the boundaries of the screen
+        position.x = Mathf.Clamp(position.x, minScreenBounds.x + 1, maxScreenBounds.x - 1);
+        transform.position = position;
 
         // Call function to shoot if space key is pressed or left mouse button is clicked
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) {
@@ -30,7 +41,7 @@ public class Player : MonoBehaviour
         if (!_laserActive) 
         {
             // Creatr projectile
-            Projectile projectile = Instantiate(this.laserPrefab, this.transform.position, Quaternion.identity);
+            Projectile projectile = Instantiate(laserPrefab, transform.position, Quaternion.identity);
             // Subscribe to destroyed event in order to call a function whenever it occurs
             projectile.destroyed += LaserDestroyed;
             _laserActive = true;
@@ -48,7 +59,10 @@ public class Player : MonoBehaviour
         // Checking if the player collides with an invader or a missile
         if (other.gameObject.layer == LayerMask.NameToLayer("Invader") ||
             other.gameObject.layer == LayerMask.NameToLayer("Missile")) {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                if (killed != null) {
+                    killed.Invoke();
+                }
+                // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
     }
    
