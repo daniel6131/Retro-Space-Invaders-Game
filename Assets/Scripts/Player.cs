@@ -12,27 +12,34 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        // Creating a variable holding the current position of the players movement
+        // Retrieving the current player position to perform operations om
         Vector3 position = transform.position;
-        // Finding the left and right boundaries of the viewport
-        Vector3 minLeftBounds = Camera.main.ViewportToWorldPoint(Vector3.zero);
-        Vector3 maxRightBounds = Camera.main.ViewportToWorldPoint(Vector3.right);
-
+        // Setting the boundaries for the players left and right movement
+        Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);
+        Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right);
+        
         // Transform position to left/right if a left/right input is receieved from the user
         if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
-            position.x -= speed * Time.deltaTime;
+            position.x -= this.speed * Time.deltaTime;
         } else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
-            position.x += speed * Time.deltaTime;
+            position.x += this.speed * Time.deltaTime;
         }
 
-        // Clamp the position of the user so that their sprite cannot move beyond the boundaries of the screen
-        position.x = Mathf.Clamp(position.x, minScreenBounds.x + 1, maxScreenBounds.x - 1);
+        // If the player is past the world-space view, then move to the opposite side
+        if (position.x < leftEdge.x - 1.0f) {
+            position.x = rightEdge.x + 1.0f;
+        } else if (position.x > rightEdge.x + 1.0f) {
+            position.x = leftEdge.x - 1.0f;
+        }
+
+        // Update player position with the operations performed
         transform.position = position;
 
         // Call function to shoot if space key is pressed or left mouse button is clicked
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) {
             Shoot();
         }
+
     }
 
     private void Shoot()
@@ -41,7 +48,7 @@ public class Player : MonoBehaviour
         if (!_laserActive) 
         {
             // Creatr projectile
-            Projectile projectile = Instantiate(laserPrefab, transform.position, Quaternion.identity);
+            Projectile projectile = Instantiate(this.laserPrefab, this.transform.position, Quaternion.identity);
             // Subscribe to destroyed event in order to call a function whenever it occurs
             projectile.destroyed += LaserDestroyed;
             _laserActive = true;
