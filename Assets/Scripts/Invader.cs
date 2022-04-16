@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class Invader : MonoBehaviour
 {
     // Array of sprites to cycle between
