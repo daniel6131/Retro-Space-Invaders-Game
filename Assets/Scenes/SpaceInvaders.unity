@@ -6518,3 +6518,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0928bf3280a74154fbb87da4cfcb9b8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameOverUI: {fileID: 311835076}
+  scoreText: {fileID: 277220493}
+  livesText: {fileID: 1578579076}
