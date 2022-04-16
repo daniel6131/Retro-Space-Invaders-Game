@@ -51,9 +51,13 @@ public sealed class GameManager : MonoBehaviour
         NewRound();
     }
 
-    // This resets the invaders grid back to default and calls the respwan method
+    // This resets the invaders grid and bunkers back to default and calls the respawn method
     private void NewRound()
     {
+        for (int i = 0; i < bunkers.Length; i++) {
+            bunkers[i].ResetBunker();
+        }
+
         invaders.gameObject.SetActive(true);
 
         Respawn();

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -8,7 +7,7 @@ public class Player : MonoBehaviour
     // Setting player speed
     public float speed = 5.0f;
     public System.Action killed;
-    private bool _laserActive;
+    public bool _laserActive { get; private set; }
 
     private void Update()
     {
@@ -47,16 +46,16 @@ public class Player : MonoBehaviour
         // Only shoot if there is currently not an active laser on the game
         if (!_laserActive) 
         {
-            // Creatr projectile
-            Projectile projectile = Instantiate(this.laserPrefab, this.transform.position, Quaternion.identity);
+            // Create laser
+            Projectile laser = Instantiate(this.laserPrefab, this.transform.position, Quaternion.identity);
             // Subscribe to destroyed event in order to call a function whenever it occurs
-            projectile.destroyed += LaserDestroyed;
+            laser.destroyed += OnLaserDestroyed;
             _laserActive = true;
         }
        
     }
 
-    private void LaserDestroyed()
+    private void OnLaserDestroyed(Projectile laser)
     {
         _laserActive = false;
     }
@@ -69,7 +68,6 @@ public class Player : MonoBehaviour
                 if (killed != null) {
                     killed.Invoke();
                 }
-                // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
     }
    
