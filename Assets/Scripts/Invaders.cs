@@ -20,6 +20,8 @@ public class Invaders : MonoBehaviour
     // How often there will be missiles
     public float missileAttackRate = 1.0f;
 
+    // Initialising values to be used to calculate the invaders speed and missile spawn rate
+    // as well as to be used to know when a round is over
     public int invadersKilled { get; private set; }
     public int totalInvaders => rows * columns;
     public int invadersAlive => totalInvaders - invadersKilled;
@@ -29,7 +31,7 @@ public class Invaders : MonoBehaviour
     {
         // Set invaders initial position to default values
         _initialPosition = transform.position;
-        
+
         for (int row = 0; row < rows; row++)
         {
             // Establishing the dimensions of center position for the invader grid

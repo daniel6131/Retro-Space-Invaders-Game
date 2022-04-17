@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 180279627}
   - component: {fileID: 180279626}
   - component: {fileID: 180279625}
+  - component: {fileID: 180279628}
   m_Layer: 0
   m_Name: MysteryShip
   m_TagString: Untagged
@@ -232,6 +233,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &180279628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 180279624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e0cffbf1f9aa634894de12995b0a124, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
+  cycleTime: 30
+  score: 300
 --- !u!1 &277220491
 GameObject:
   m_ObjectHideFlags: 0
@@ -968,15 +984,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 103e1ac53d88405448967013e1374d31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rows: 5
+  columns: 11
   prefabs:
   - {fileID: 8584850342105869315, guid: 5f028b2ba8388a149a15b634cc6b13c6, type: 3}
   - {fileID: 8584850342105869315, guid: 5f028b2ba8388a149a15b634cc6b13c6, type: 3}
   - {fileID: 3936640276171952207, guid: 4be0e5fd051df5f4092cafa9805c4aab, type: 3}
   - {fileID: 8948465676021791903, guid: 8c0d9293659933640ae5aae4d76342ca, type: 3}
   - {fileID: 2575659340361709120, guid: 0ce1d850cc9fdf941897ec84df0f4b50, type: 3}
-  rows: 5
-  columns: 11
-  missilePrefab: {fileID: 6911547418799541877, guid: c6c325d7a59215548a1e63d3dce44311, type: 3}
   speed:
     serializedVersion: 2
     m_Curve:
@@ -1001,6 +1016,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  missilePrefab: {fileID: 6911547418799541877, guid: c6c325d7a59215548a1e63d3dce44311, type: 3}
   missileAttackRate: 1
 --- !u!4 &1049431289
 Transform:

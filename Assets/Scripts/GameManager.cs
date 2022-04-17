@@ -3,16 +3,17 @@ using UnityEngine;
 
 public sealed class GameManager : MonoBehaviour
 {
-    private Player player;
-    private Invaders invaders;
-    private Bunker[] bunkers;
-
     public GameObject gameOverUI;
     public Text scoreText;
-    public Text livesText;
-
     public int score { get; private set; }
+    public Text livesText;
     public int lives { get; private set; }
+
+    // Providing variables for the different types of game objects to be managed
+    private Player player;
+    private Bunker[] bunkers;
+    private Invaders invaders;
+    private MysteryShip mysteryShip;
 
     // Each time the scene instantiates:
     private void Start()
@@ -20,6 +21,7 @@ public sealed class GameManager : MonoBehaviour
         // The killed variables for each are reset
         player.killed += OnPlayerKilled;
         invaders.killed += OnInvaderKilled;
+        mysteryShip.killed += OnMysteryShipKilled;
         // The method new game is called to reset and restart a game
         NewGame();
     }
@@ -34,12 +36,13 @@ public sealed class GameManager : MonoBehaviour
         }
     }
 
-    // Upon loading obtain the objects for all game assets
+    // Upon loading obtain the game objects for all game assets
     private void Awake()
     {
         player = FindObjectOfType<Player>();
         bunkers = FindObjectsOfType<Bunker>();
         invaders = FindObjectOfType<Invaders>();
+        mysteryShip = FindObjectOfType<MysteryShip>();
     }
 
     // Method that is called when a fresh/new instance of a game needs to occur
@@ -84,7 +87,7 @@ public sealed class GameManager : MonoBehaviour
         invaders.gameObject.SetActive(false);
     }
 
-    // Method to set the value of the score according to whatever is passed in
+    // Method to set the value of the score according to whatever value is passed in
     private void SetScore(int score)
     {
         this.score = score;
@@ -124,5 +127,11 @@ public sealed class GameManager : MonoBehaviour
         if (invaders.invadersKilled == invaders.totalInvaders) {
             NewRound();
         }
+    }
+
+    // When the mystery ship is killed, update the players score accordingly
+    private void OnMysteryShipKilled(MysteryShip mysteryShip)
+    {
+        SetScore(score + mysteryShip.score);
     }
 }
