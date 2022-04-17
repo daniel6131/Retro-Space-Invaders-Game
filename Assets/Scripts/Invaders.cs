@@ -1,43 +1,48 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Invaders : MonoBehaviour
 {
-    // Array of prefabs corresponding to each row in the grid
-    public Invader[] prefabs;
     // The size of the invaders grid
     public int rows = 5;
     public int columns = 11;
 
-    public Projectile missilePrefab;
+    // Array of prefabs corresponding to each row in the grid
+    public Invader[] prefabs = new Invader[5];
     // The speed at which the invaders move based upon the percentage of invaders killed
-    public AnimationCurve speed;
+    public AnimationCurve speed = new AnimationCurve();
     // The inital direction the invaders move
-    private Vector3 _direction = Vector2.right;
+    public Vector3 _direction { get; private set; } = Vector3.right;
+    // Initial position of the invaders
+    public Vector3 _initialPosition { get; private set; }
+    public System.Action<Invader> killed;
 
+    public Projectile missilePrefab;
     // How often there will be missiles
     public float missileAttackRate = 1.0f;
 
     public int invadersKilled { get; private set; }
-    public int totalInvaders => this.rows * this.columns;
-    public int invadersAlive => this.totalInvaders - this.invadersKilled;
-    public float percentKilled => (float)this.invadersKilled / (float)this.totalInvaders;
+    public int totalInvaders => rows * columns;
+    public int invadersAlive => totalInvaders - invadersKilled;
+    public float percentKilled => (float)invadersKilled / (float)totalInvaders;
 
     private void Awake()
     {
-        for (int row = 0; row < this.rows; row++)
+        // Set invaders initial position to default values
+        _initialPosition = transform.position;
+        
+        for (int row = 0; row < rows; row++)
         {
             // Establishing the dimensions of center position for the invader grid
-            float width = 2.0f * (this.columns - 1);
-            float height = 2.0f * (this.rows - 1);
+            float width = 2.0f * (columns - 1);
+            float height = 2.0f * (rows - 1);
             Vector2 centering = new Vector2(-width / 2, -height / 2);
             // Offsetting each invader based on the row in which they're positioned
             Vector3 rowPosition = new Vector3(centering.x, centering.y + (row * 2.0f), 0.0f);
 
-            for (int col = 0; col < this.columns; col++)
+            for (int col = 0; col < columns; col++)
             {
-                Invader invader = Instantiate(this.prefabs[row], this.transform);
-                invader.killed += InvaderKilled;
+                Invader invader = Instantiate(prefabs[row], transform);
+                invader.killed += OnInvaderKilled;
                 
                 // Offsetting each invader based on the column in which they're positioned
                 Vector3 position = rowPosition;
@@ -54,7 +59,8 @@ public class Invaders : MonoBehaviour
 
     private void Update()
     {
-        this.transform.position += _direction * this.speed.Evaluate(this.percentKilled) * Time.deltaTime;
+        // Evaluate speed of the invaders reflective of how many have been killed
+        transform.position += _direction * this.speed.Evaluate(percentKilled) * Time.deltaTime;
 
         // Obtaining the worldspace cooridnates for left and right edges of the game screen
         Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);
@@ -62,7 +68,7 @@ public class Invaders : MonoBehaviour
 
         // Looping through each invader to see if it has reached the end of the screen 
         // if so we will flip the direciton
-        foreach (Transform invader in this.transform)
+        foreach (Transform invader in transform)
         {
             // Checking if the invader is alive / active
             if (!invader.gameObject.activeInHierarchy) {
@@ -81,37 +87,50 @@ public class Invaders : MonoBehaviour
     private void AdvanceRow()
     {
         // Flipping direction value
-        _direction.x *= -1.0f;
+        _direction = new Vector3(-_direction.x, 0f, 0f);
 
         // Moving row position down 1
-        Vector3 position = this.transform.position;
+        Vector3 position = transform.position;
         position.y -= 1.0f;
-        this.transform.position = position;
+        transform.position = position;
     }
 
     private void MissileAttack()
     {
-        foreach (Transform invader in this.transform)
+        foreach (Transform invader in transform)
         {
             // Checking if the invader is alive / active
             if (!invader.gameObject.activeInHierarchy) {
                 continue;
             }
 
-            if (Random.value < (1.0f / (float)this.invadersAlive)) {
-                Instantiate(this.missilePrefab, invader.position, Quaternion.identity);
+            if (Random.value < (1.0f / (float)invadersAlive)) {
+                Instantiate(missilePrefab, invader.position, Quaternion.identity);
                 // Only one missile should be active, so break here in order to spawn no more
                 break;
             }
         }
     }
  
-    private void InvaderKilled()
+    // Remove invader from scene when killed and increment killed value
+    private void OnInvaderKilled(Invader invader)
     {
-        this.invadersKilled++;
+        // Deactivating/turning off the invader game object
+        invader.gameObject.SetActive(false);
+        invadersKilled++;
+        killed(invader);
+    }
 
-        if (this.invadersKilled >= this.totalInvaders) {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    // When the game ends, reset the invaders grid to the intial values
+    public void ResetInvaders()
+    {
+        invadersKilled = 0;
+        _direction = Vector3.right;
+        transform.position = _initialPosition;
+
+        // For every invader in the grid, reset them to be visible if they are not already
+        foreach (Transform invader in transform) {
+            invader.gameObject.SetActive(true);
         }
     }
 

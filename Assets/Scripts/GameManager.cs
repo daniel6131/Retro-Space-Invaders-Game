@@ -17,8 +17,9 @@ public sealed class GameManager : MonoBehaviour
     // Each time the scene instantiates:
     private void Start()
     {
-        // TYhe player killed variable is reset
+        // The killed variables for each are reset
         player.killed += OnPlayerKilled;
+        invaders.killed += OnInvaderKilled;
         // The method new game is called to reset and restart a game
         NewGame();
     }
@@ -45,9 +46,9 @@ public sealed class GameManager : MonoBehaviour
     private void NewGame()
     {
         gameOverUI.SetActive(false);
-
         SetScore(0);
         SetLives(3);
+
         NewRound();
     }
 
@@ -58,6 +59,8 @@ public sealed class GameManager : MonoBehaviour
             bunkers[i].ResetBunker();
         }
 
+        // Calls the ResetInvaders method to reposition invaders, anmd set the invaders grid to be visible
+        invaders.ResetInvaders();
         invaders.gameObject.SetActive(true);
 
         Respawn();
@@ -109,6 +112,17 @@ public sealed class GameManager : MonoBehaviour
             Invoke(nameof(NewRound), 1f);
         } else {
             GameOver();
+        }
+    }
+
+    // When an invader is killed, increment the player's score based on the assigned score for that invader
+    private void OnInvaderKilled(Invader invader)
+    {
+        SetScore(score + invader.score);
+
+        // If all invaders are killed, then a new round can begin
+        if (invaders.invadersKilled == invaders.totalInvaders) {
+            NewRound();
         }
     }
 }
