@@ -772,8 +772,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654f916ad0cdf444481cbd357b0a80e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipStats:
+    maxHealth: 1
+    currentHealth: 0
+    maxLives: 3
+    currentLives: 3
+    shipSpeed: 10
+    fireRate: 0.5
   laserPrefab: {fileID: -5637204446194996645, guid: 2a74a778d81133742a3c36c9deb2e7c8, type: 3}
-  speed: 5
 --- !u!50 &709954586
 Rigidbody2D:
   serializedVersion: 4
@@ -6538,6 +6544,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0928bf3280a74154fbb87da4cfcb9b8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipStats:
+    maxHealth: 0
+    currentHealth: 0
+    maxLives: 3
+    currentLives: 3
+    shipSpeed: 0
+    fireRate: 0
   gameOverUI: {fileID: 311835076}
   scoreText: {fileID: 277220493}
   livesText: {fileID: 1578579076}

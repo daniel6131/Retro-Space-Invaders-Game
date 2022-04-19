@@ -3,11 +3,13 @@ using UnityEngine;
 
 public sealed class GameManager : MonoBehaviour
 {
+    // Reference to the player's ship stats
+    public ShipStats shipStats;
+
     public GameObject gameOverUI;
     public Text scoreText;
     public int score { get; private set; }
     public Text livesText;
-    public int lives { get; private set; }
 
     // Providing variables for the different types of game objects to be managed
     private Player player;
@@ -30,7 +32,7 @@ public sealed class GameManager : MonoBehaviour
     private void Update()
     {
         // Whether the player has run out of lives and has chosen to start a new game
-        if (lives <= 0 && Input.GetKeyDown(KeyCode.Return)) {
+        if (shipStats.currentLives <= 0 && Input.GetKeyDown(KeyCode.Return)) {
             // If this criteria is fulfilled, then a new game can be started
             NewGame();
         }
@@ -50,7 +52,7 @@ public sealed class GameManager : MonoBehaviour
     {
         gameOverUI.SetActive(false);
         SetScore(0);
-        SetLives(3);
+        SetLives(shipStats.maxLives);
 
         NewRound();
     }
@@ -75,6 +77,7 @@ public sealed class GameManager : MonoBehaviour
         Vector3 position = player.transform.position;
         position.x = 0f;
         player.transform.position = position;
+        shipStats.currentHealth = shipStats.maxHealth;
         player.gameObject.SetActive(true);
     }
 
@@ -97,20 +100,20 @@ public sealed class GameManager : MonoBehaviour
     // Method to set the value of the lives according to whatever is passed in
     private void SetLives(int lives)
     {
-        this.lives = Mathf.Max(lives, 0);
-        livesText.text = lives.ToString();
+        shipStats.currentLives = Mathf.Max(lives, 0);
+        livesText.text = shipStats.currentLives.ToString();
     }
 
     // This method controls the game behavour when the player has been killed:
     private void OnPlayerKilled()
     {
         // Decrement the number of lives
-        SetLives(lives - 1);
+        SetLives(shipStats.currentLives - 1);
         
         player.gameObject.SetActive(false);
 
         // If the player still has sufficient lives
-        if (lives > 0) {
+        if (shipStats.currentLives > 0) {
             // Start a new round
             Invoke(nameof(NewRound), 1f);
         } else {
