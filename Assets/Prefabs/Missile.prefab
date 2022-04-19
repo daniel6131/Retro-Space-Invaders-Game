@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -658962842706980478}
   - component: {fileID: -2357876822129612632}
   - component: {fileID: -1081096913648160214}
+  - component: {fileID: -1832279424234298992}
   m_Layer: 9
   m_Name: Missile
   m_TagString: Untagged
@@ -144,9 +145,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b159cf8b0aac3a4696602a2f451def0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animationSprites:
-  - {fileID: 21300000, guid: ee121be1d76093a43b4e759fa2b0707f, type: 3}
-  - {fileID: 21300000, guid: 46c88ee237f011949b288d247267b2d8, type: 3}
-  animationTime: 1
   direction: {x: 0, y: -1, z: 0}
   speed: 20
+--- !u!95 &-1832279424234298992
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4508025431241017501}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3e6429dc93feb314a905b234380cdee6, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
