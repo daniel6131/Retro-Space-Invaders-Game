@@ -8,6 +8,8 @@ public class Invader : MonoBehaviour
     // The score awarded for eliminating an invader
     public int score = 10;
 
+    public GameObject explosion;
+
     // Handling the collisions between a laser and a invader
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -15,6 +17,7 @@ public class Invader : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("Laser")) {
             // A delegate to be invoked by another scipt whenever a collision occurs
             killed?.Invoke(this);
+            Instantiate(explosion, transform.position, Quaternion.identity);
         }
     }
 }

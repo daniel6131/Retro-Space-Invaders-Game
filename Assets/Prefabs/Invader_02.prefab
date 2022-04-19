@@ -8,6 +8,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 57370187049360954, guid: 407e58ed79b3d954198861c0bac8eff0, type: 3}
+      propertyPath: score
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 57370187049360954, guid: 407e58ed79b3d954198861c0bac8eff0, type: 3}
+      propertyPath: explosion
+      value: 
+      objectReference: {fileID: 7256969477307220718, guid: 00de40253d246684c85f8b25c93aa530, type: 3}
+    - target: {fileID: 57370187049360954, guid: 407e58ed79b3d954198861c0bac8eff0, type: 3}
       propertyPath: animationSprites.Array.size
       value: 2
       objectReference: {fileID: 0}

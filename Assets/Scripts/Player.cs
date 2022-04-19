@@ -5,7 +5,7 @@ public class Player : MonoBehaviour
     public Projectile laserPrefab;
 
     // Setting player speed
-    public float speed = 5.0f;
+    private float speed = 10f;
     public System.Action killed;
     public bool _laserActive { get; private set; }
 
