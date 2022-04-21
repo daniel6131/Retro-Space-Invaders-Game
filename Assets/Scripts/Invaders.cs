@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Invaders : MonoBehaviour
 {
@@ -13,12 +14,18 @@ public class Invaders : MonoBehaviour
     // The inital direction the invaders move
     public Vector3 _direction { get; private set; } = Vector3.right;
     // Initial position of the invaders
-    public Vector3 _initialPosition { get; private set; }
+    public Vector2 _initialPosition = new Vector2(0,20);
+    // Y value which we want the invaders grid to start functioning at
+    private const float START_Y = 3.5f;
     public System.Action<Invader> killed;
 
     public Projectile missilePrefab;
     // How often there will be missiles
     public float missileAttackRate = 1.0f;
+
+    // Bool to represent whether the invaders are in the process of entering or not
+    private bool entering = true;
+    private bool respawning = false;
 
     // Initialising values to be used to calculate the invaders speed and missile spawn rate
     // as well as to be used to know when a round is over
@@ -30,7 +37,7 @@ public class Invaders : MonoBehaviour
     private void Awake()
     {
         // Set invaders initial position to default values
-        _initialPosition = transform.position;
+        transform.position = _initialPosition;
 
         for (int row = 0; row < rows; row++)
         {
@@ -61,27 +68,37 @@ public class Invaders : MonoBehaviour
 
     private void Update()
     {
-        // Evaluate speed of the invaders reflective of how many have been killed
-        transform.position += _direction * this.speed.Evaluate(percentKilled) * Time.deltaTime;
+        if (entering) {
+            transform.Translate(Vector2.down * Time.deltaTime * 10);
 
-        // Obtaining the worldspace cooridnates for left and right edges of the game screen
-        Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);
-        Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right);
-
-        // Looping through each invader to see if it has reached the end of the screen 
-        // if so we will flip the direciton
-        foreach (Transform invader in transform)
-        {
-            // Checking if the invader is alive / active
-            if (!invader.gameObject.activeInHierarchy) {
-                continue;
+            if (transform.position.y <= START_Y) {
+                entering = false;
             }
+        } else {
+            if (!respawning) {
+                // Evaluate speed of the invaders reflective of how many have been killed
+                transform.position += _direction * this.speed.Evaluate(percentKilled) * Time.deltaTime;
 
-            // Checking if the invader has hit the right edge of the screen
-            if (_direction == Vector3.right && invader.position.x >= (rightEdge.x - 1.0f)) {
-                AdvanceRow();
-            } else if (_direction == Vector3.left && invader.position.x <= (leftEdge.x + 1.0f)) {
-                AdvanceRow();
+                // Obtaining the worldspace cooridnates for left and right edges of the game screen
+                Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);
+                Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right);
+
+                // Looping through each invader to see if it has reached the end of the screen 
+                // if so we will flip the direciton
+                foreach (Transform invader in transform)
+                {
+                    // Checking if the invader is alive / active
+                    if (!invader.gameObject.activeInHierarchy) {
+                        continue;
+                    }
+
+                    // Checking if the invader has hit the right edge of the screen
+                    if (_direction == Vector3.right && invader.position.x >= (rightEdge.x - 1.0f)) {
+                        AdvanceRow();
+                    } else if (_direction == Vector3.left && invader.position.x <= (leftEdge.x + 1.0f)) {
+                        AdvanceRow();
+                    }
+                }
             }
         }
     }
@@ -99,17 +116,19 @@ public class Invaders : MonoBehaviour
 
     private void MissileAttack()
     {
-        foreach (Transform invader in transform)
-        {
-            // Checking if the invader is alive / active
-            if (!invader.gameObject.activeInHierarchy) {
-                continue;
-            }
+        if (!entering && !respawning) {
+            foreach (Transform invader in transform)
+            {
+                // Checking if the invader is alive / active
+                if (!invader.gameObject.activeInHierarchy) {
+                    continue;
+                }
 
-            if (Random.value < (1.0f / (float)invadersAlive)) {
-                Instantiate(missilePrefab, invader.position, Quaternion.identity);
-                // Only one missile should be active, so break here in order to spawn no more
-                break;
+                if (Random.value < (1.0f / (float)invadersAlive)) {
+                    Instantiate(missilePrefab, invader.position, Quaternion.identity);
+                    // Only one missile should be active, so break here in order to spawn no more
+                    break;
+                }
             }
         }
     }
@@ -124,16 +143,22 @@ public class Invaders : MonoBehaviour
     }
 
     // When the game ends, reset the invaders grid to the intial values
-    public void ResetInvaders()
+    public IEnumerator ResetInvaders()
     {
+        respawning = true;
+
         invadersKilled = 0;
         _direction = Vector3.right;
         transform.position = _initialPosition;
+
+        yield return new WaitForSeconds(3);
+
+        respawning = false;
+        entering = true;
 
         // For every invader in the grid, reset them to be visible if they are not already
         foreach (Transform invader in transform) {
             invader.gameObject.SetActive(true);
         }
     }
-
 }

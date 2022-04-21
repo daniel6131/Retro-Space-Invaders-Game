@@ -3,9 +3,6 @@ using UnityEngine;
 
 public sealed class GameManager : MonoBehaviour
 {
-    // Reference to the player's ship stats
-    public ShipStats shipStats;
-
     public GameObject gameOverUI;
 
     // Providing variables for the different types of game objects to be managed
@@ -29,7 +26,7 @@ public sealed class GameManager : MonoBehaviour
     private void Update()
     {
         // Whether the player has run out of lives and has chosen to start a new game
-        if (shipStats.currentLives <= 0 && Input.GetKeyDown(KeyCode.Return)) {
+        if (player.shipStats.currentLives <= 0 && Input.GetKeyDown(KeyCode.Return)) {
             // If this criteria is fulfilled, then a new game can be started
             NewGame();
         }
@@ -49,7 +46,7 @@ public sealed class GameManager : MonoBehaviour
     {
         gameOverUI.SetActive(false);
         UIManager.SetScore(0);
-        UIManager.SetLives(shipStats.maxLives);
+        UIManager.SetLives(player.shipStats.maxLives);
 
         NewRound();
     }
@@ -57,12 +54,15 @@ public sealed class GameManager : MonoBehaviour
     // This resets the invaders grid and bunkers back to default and calls the respawn method
     private void NewRound()
     {
+        // Increment current wave
+        UIManager.SetWave();
+
         for (int i = 0; i < bunkers.Length; i++) {
             bunkers[i].ResetBunker();
         }
 
-        // Calls the ResetInvaders method to reposition invaders, anmd set the invaders grid to be visible
-        invaders.ResetInvaders();
+        // Calls the ResetInvaders method to reposition invaders, and set the invaders grid to be visible
+        StartCoroutine(invaders.ResetInvaders());
         invaders.gameObject.SetActive(true);
 
         Respawn();
@@ -74,7 +74,7 @@ public sealed class GameManager : MonoBehaviour
         Vector3 position = player.transform.position;
         position.x = 0f;
         player.transform.position = position;
-        shipStats.currentHealth = shipStats.maxHealth;
+        player.shipStats.currentHealth = player.shipStats.maxHealth;
         player.gameObject.SetActive(true);
     }
 
@@ -92,11 +92,11 @@ public sealed class GameManager : MonoBehaviour
     {
         player.gameObject.SetActive(false);
 
-        shipStats.currentLives--;
-        UIManager.SetLives(shipStats.currentLives);
+        player.shipStats.currentLives--;
+        UIManager.SetLives(player.shipStats.currentLives);
 
         // If the player still has sufficient lives
-        if (shipStats.currentLives > 0) {
+        if (player.shipStats.currentLives > 0) {
             // Start a new round
             Invoke(nameof(NewRound), 1f);
         } else {
