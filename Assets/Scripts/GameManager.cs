@@ -1,5 +1,6 @@
 using UnityEngine.UI;
 using UnityEngine;
+using TMPro;
 
 public sealed class GameManager : MonoBehaviour
 {
@@ -7,15 +8,33 @@ public sealed class GameManager : MonoBehaviour
     public ShipStats shipStats;
 
     public GameObject gameOverUI;
-    public Text scoreText;
-    public int score { get; private set; }
-    public Text livesText;
 
     // Providing variables for the different types of game objects to be managed
     private Player player;
     private Bunker[] bunkers;
     private Invaders invaders;
     private MysteryShip mysteryShip;
+
+    public TextMeshProUGUI scoreText;
+    private int score;
+    public TextMeshProUGUI highscoreText;
+    private int highscore;
+    public TextMeshProUGUI coinsText;
+    public TextMeshProUGUI waveText;
+    private int wave;
+
+    // Array to hold the 3 life sprite images
+    public Image[] lifeSprites;
+    private Color32 active = new Color(1, 1, 1, 1);
+    private Color32 inactive = new Color(1, 1, 1, 0.25f);
+
+    // Reference to current health bar
+    public Image healthBar;
+    // Array to hold all sprites for the different health
+    public Sprite[] healthBars;
+
+    // Current instance of the class
+    private static GameManager instance;
 
     // Each time the scene instantiates:
     private void Start()
@@ -41,6 +60,13 @@ public sealed class GameManager : MonoBehaviour
     // Upon loading obtain the game objects for all game assets
     private void Awake()
     {
+        // Ensuring only one instance of the UI manager is running
+        if (instance == null) {
+            instance = this;
+        } else {
+            Destroy(gameObject);
+        }
+
         player = FindObjectOfType<Player>();
         bunkers = FindObjectsOfType<Bunker>();
         invaders = FindObjectOfType<Invaders>();
@@ -91,17 +117,45 @@ public sealed class GameManager : MonoBehaviour
     }
 
     // Method to set the value of the score according to whatever value is passed in
-    private void SetScore(int score)
+     public static void SetScore(int score)
     {
-        this.score = score;
-        scoreText.text = score.ToString().PadLeft(4, '0');
+        instance.score = score;
+        instance.scoreText.text = instance.score.ToString().PadLeft(4, '0');
     }
 
     // Method to set the value of the lives according to whatever is passed in
-    private void SetLives(int lives)
+     public static void SetLives(int lives)
     {
-        shipStats.currentLives = Mathf.Max(lives, 0);
-        livesText.text = shipStats.currentLives.ToString();
+        foreach (Image i in instance.lifeSprites) 
+        {
+            i.color = instance.inactive;
+        }
+
+        for (int i = 0; i < lives; i++)
+        {
+            instance.lifeSprites[i].color = instance.active;
+        }
+    }
+
+     public static void SetHealthbar(int health)
+    {
+        instance.healthBar.sprite = instance.healthBars[health];
+    }
+
+    public static void SetHighScore()
+    {
+
+    }
+
+    public static void SetWave()
+    {
+        instance.wave++;
+        instance.waveText.text = instance.wave.ToString();
+    }
+
+    public static void SetCoins()
+    {
+
     }
 
     // This method controls the game behavour when the player has been killed:

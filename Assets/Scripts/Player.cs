@@ -16,6 +16,10 @@ public class Player : MonoBehaviour
     {
         shipStats.currentHealth = shipStats.maxHealth;
         shipStats.currentLives = shipStats.maxLives;
+
+        GameManager.SetHealthbar (shipStats.currentHealth);
+        GameManager.SetLives(shipStats.currentLives);
+
     }
 
     private void Update()
@@ -68,6 +72,7 @@ public class Player : MonoBehaviour
     private void TakeDamage()
     {
         shipStats.currentHealth--;
+        GameManager.SetHealthbar(shipStats.currentHealth);
 
         // If the ship has no remaining health
         if(shipStats.currentHealth <= 0)
