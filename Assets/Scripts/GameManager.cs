@@ -1,6 +1,5 @@
 using UnityEngine.UI;
 using UnityEngine;
-using TMPro;
 
 public sealed class GameManager : MonoBehaviour
 {
@@ -14,27 +13,6 @@ public sealed class GameManager : MonoBehaviour
     private Bunker[] bunkers;
     private Invaders invaders;
     private MysteryShip mysteryShip;
-
-    public TextMeshProUGUI scoreText;
-    private int score;
-    public TextMeshProUGUI highscoreText;
-    private int highscore;
-    public TextMeshProUGUI coinsText;
-    public TextMeshProUGUI waveText;
-    private int wave;
-
-    // Array to hold the 3 life sprite images
-    public Image[] lifeSprites;
-    private Color32 active = new Color(1, 1, 1, 1);
-    private Color32 inactive = new Color(1, 1, 1, 0.25f);
-
-    // Reference to current health bar
-    public Image healthBar;
-    // Array to hold all sprites for the different health
-    public Sprite[] healthBars;
-
-    // Current instance of the class
-    private static GameManager instance;
 
     // Each time the scene instantiates:
     private void Start()
@@ -60,13 +38,6 @@ public sealed class GameManager : MonoBehaviour
     // Upon loading obtain the game objects for all game assets
     private void Awake()
     {
-        // Ensuring only one instance of the UI manager is running
-        if (instance == null) {
-            instance = this;
-        } else {
-            Destroy(gameObject);
-        }
-
         player = FindObjectOfType<Player>();
         bunkers = FindObjectsOfType<Bunker>();
         invaders = FindObjectOfType<Invaders>();
@@ -77,8 +48,8 @@ public sealed class GameManager : MonoBehaviour
     private void NewGame()
     {
         gameOverUI.SetActive(false);
-        SetScore(0);
-        SetLives(shipStats.maxLives);
+        UIManager.SetScore(0);
+        UIManager.SetLives(shipStats.maxLives);
 
         NewRound();
     }
@@ -116,55 +87,13 @@ public sealed class GameManager : MonoBehaviour
         invaders.gameObject.SetActive(false);
     }
 
-    // Method to set the value of the score according to whatever value is passed in
-     public static void SetScore(int score)
-    {
-        instance.score = score;
-        instance.scoreText.text = instance.score.ToString().PadLeft(4, '0');
-    }
-
-    // Method to set the value of the lives according to whatever is passed in
-     public static void SetLives(int lives)
-    {
-        foreach (Image i in instance.lifeSprites) 
-        {
-            i.color = instance.inactive;
-        }
-
-        for (int i = 0; i < lives; i++)
-        {
-            instance.lifeSprites[i].color = instance.active;
-        }
-    }
-
-     public static void SetHealthbar(int health)
-    {
-        instance.healthBar.sprite = instance.healthBars[health];
-    }
-
-    public static void SetHighScore()
-    {
-
-    }
-
-    public static void SetWave()
-    {
-        instance.wave++;
-        instance.waveText.text = instance.wave.ToString();
-    }
-
-    public static void SetCoins()
-    {
-
-    }
-
     // This method controls the game behavour when the player has been killed:
     private void OnPlayerKilled()
     {
-        // Decrement the number of lives
-        SetLives(shipStats.currentLives - 1);
-        
         player.gameObject.SetActive(false);
+
+        shipStats.currentLives--;
+        UIManager.SetLives(shipStats.currentLives);
 
         // If the player still has sufficient lives
         if (shipStats.currentLives > 0) {
@@ -178,7 +107,7 @@ public sealed class GameManager : MonoBehaviour
     // When an invader is killed, increment the player's score based on the assigned score for that invader
     private void OnInvaderKilled(Invader invader)
     {
-        SetScore(score + invader.score);
+        UIManager.SetScore(invader.score);
 
         // If all invaders are killed, then a new round can begin
         if (invaders.invadersKilled == invaders.totalInvaders) {
@@ -186,9 +115,9 @@ public sealed class GameManager : MonoBehaviour
         }
     }
 
-    // When the mystery ship is killed, update the players score accordingly
+     // When the mystery ship is killed, update the players score accordingly
     private void OnMysteryShipKilled(MysteryShip mysteryShip)
     {
-        SetScore(score + mysteryShip.score);
+        UIManager.SetScore(mysteryShip.score);
     }
 }

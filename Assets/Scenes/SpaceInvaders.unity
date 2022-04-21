@@ -1612,6 +1612,7 @@ GameObject:
   - component: {fileID: 780080488}
   - component: {fileID: 780080487}
   - component: {fileID: 780080486}
+  - component: {fileID: 780080490}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1701,6 +1702,34 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &780080490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 780080485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c918eaeecd123f342ad266fcf06dc7d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreText: {fileID: 918513000}
+  highscoreText: {fileID: 1284582432}
+  coinsText: {fileID: 1315246843}
+  waveText: {fileID: 1284008363}
+  lifeSprites:
+  - {fileID: 996908457}
+  - {fileID: 1780642389}
+  - {fileID: 1212069491}
+  healthBar: {fileID: 388162960}
+  healthBars:
+  - {fileID: -7467413282938096052, guid: fc2b4c69e14025c47aa0c47dad723bf0, type: 3}
+  - {fileID: -1598685635086416073, guid: fc2b4c69e14025c47aa0c47dad723bf0, type: 3}
+  - {fileID: -8889566870884673856, guid: fc2b4c69e14025c47aa0c47dad723bf0, type: 3}
+  - {fileID: 396259056645360257, guid: fc2b4c69e14025c47aa0c47dad723bf0, type: 3}
+  - {fileID: -6437992265152185607, guid: fc2b4c69e14025c47aa0c47dad723bf0, type: 3}
+  - {fileID: -5513350640364851514, guid: fc2b4c69e14025c47aa0c47dad723bf0, type: 3}
 --- !u!1 &835777804
 GameObject:
   m_ObjectHideFlags: 0
@@ -8475,22 +8504,6 @@ MonoBehaviour:
     shipSpeed: 0
     fireRate: 0
   gameOverUI: {fileID: 311835076}
-  scoreText: {fileID: 918513000}
-  highscoreText: {fileID: 1284582432}
-  coinsText: {fileID: 1315246843}
-  waveText: {fileID: 1284008363}
-  lifeSprites:
-  - {fileID: 996908457}
-  - {fileID: 1780642389}
-  - {fileID: 1212069491}
-  healthBar: {fileID: 388162960}
-  healthBars:
-  - {fileID: -7467413282938096052, guid: fc2b4c69e14025c47aa0c47dad723bf0, type: 3}
-  - {fileID: -1598685635086416073, guid: fc2b4c69e14025c47aa0c47dad723bf0, type: 3}
-  - {fileID: -8889566870884673856, guid: fc2b4c69e14025c47aa0c47dad723bf0, type: 3}
-  - {fileID: 396259056645360257, guid: fc2b4c69e14025c47aa0c47dad723bf0, type: 3}
-  - {fileID: -6437992265152185607, guid: fc2b4c69e14025c47aa0c47dad723bf0, type: 3}
-  - {fileID: -5513350640364851514, guid: fc2b4c69e14025c47aa0c47dad723bf0, type: 3}
 --- !u!1 &1705878721
 GameObject:
   m_ObjectHideFlags: 0

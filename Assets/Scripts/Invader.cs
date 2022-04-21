@@ -6,7 +6,7 @@ public class Invader : MonoBehaviour
     public System.Action<Invader> killed;
 
     // The score awarded for eliminating an invader
-    public int score = 10;
+    public int score;
 
     public GameObject explosion;
 
