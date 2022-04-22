@@ -65,9 +65,18 @@ public class UIManager : MonoBehaviour
         instance.healthBar.sprite = instance.healthBars[health];
     }
 
-    public static void SetHighScore()
+    public static void SetHighscore(int hs)
     {
+        if (instance.highscore < hs)
+        {
+            instance.highscore = hs;
+            instance.highscoreText.text = instance.highscore.ToString().PadLeft(4, '0');
+        }
+    }
 
+    public static int GetHighscore()
+    {
+        return instance.highscore;
     }
 
     // After a wave has been completed, increment the wave counter 

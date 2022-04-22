@@ -120,6 +120,7 @@ public sealed class GameManager : MonoBehaviour
         gameOverUI.SetActive(true);
         // Invaders grid is removed from the scene
         invaders.gameObject.SetActive(false);
+        SaveManager.SaveProgress();
     }
 
     // This method controls the game behavour when the player has been killed:
