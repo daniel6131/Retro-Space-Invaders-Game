@@ -12,6 +12,8 @@ public sealed class GameManager : MonoBehaviour
     private Invaders invaders;
     private MysteryShip mysteryShip;
 
+    private bool roundRespawn = false;
+
     public int countdownTime;
     [SerializeField] Text countdownDisplay;
 
@@ -50,7 +52,8 @@ public sealed class GameManager : MonoBehaviour
     private void Update()
     {
         // Whether the player has run out of lives and has chosen to start a new game
-        if (player.shipStats.currentLives <= 0 && Input.GetKeyDown(KeyCode.Return)) {
+        if (player.shipStats.currentLives <= 0 && Input.GetKeyDown(KeyCode.Return)) 
+        {
             // If this criteria is fulfilled, then a new game can be started
             NewGame();
         }
@@ -82,7 +85,8 @@ public sealed class GameManager : MonoBehaviour
         // Increment current wave
         UIManager.SetWave();
 
-        for (int i = 0; i < bunkers.Length; i++) {
+        for (int i = 0; i < bunkers.Length; i++) 
+        {
             bunkers[i].ResetBunker();
         }
 
@@ -101,8 +105,12 @@ public sealed class GameManager : MonoBehaviour
         position.x = 0f;
         player.transform.position = position;
         player.shipStats.currentHealth = player.shipStats.maxHealth;
+        UIManager.SetHealthbar(player.shipStats.currentHealth);
         player.gameObject.SetActive(true);
-        StartCoroutine(player.SpawningGrace());
+        if (!roundRespawn) {
+            StartCoroutine(player.SpawningGrace());
+        }
+        roundRespawn = false;
     }
 
     // This method controls the behaviour when the player has lost all lives;
@@ -122,11 +130,17 @@ public sealed class GameManager : MonoBehaviour
         player.shipStats.currentLives--;
         UIManager.SetLives(player.shipStats.currentLives);
 
+        roundRespawn = true;
+
         // If the player still has sufficient lives
-        if (player.shipStats.currentLives > 0) {
-            // Start a new round
-            Invoke(nameof(NewRound), 1f);
-        } else {
+        if (player.shipStats.currentLives > 0) 
+        {
+            // // Start a new round
+            // Invoke(nameof(NewRound), 1f);
+            Invoke(nameof(Respawn), 1f);
+        } 
+        else 
+        {
             GameOver();
         }
     }
@@ -137,7 +151,8 @@ public sealed class GameManager : MonoBehaviour
         UIManager.SetScore(invader.score);
 
         // If all invaders are killed, then a new round can begin
-        if (invaders.invadersKilled == invaders.totalInvaders) {
+        if (invaders.invadersKilled == invaders.totalInvaders) 
+        {
             NewRound();
         }
     }

@@ -56,14 +56,18 @@ public class MysteryShip : MonoBehaviour
     // and determining whether the ship needs to move from left to right or right to left
     private void Update()
     {
-        if (!grace) {
-            if (!_spawned) {
+        if (!grace) 
+        {
+            if (!_spawned) 
+            {
                 return;
             }
 
-            if (_direction == 1) {
+            if (_direction == 1) 
+            {
                 MoveRight();
-            } else {
+            } 
+            else {
                 MoveLeft();
             }
         }
@@ -75,7 +79,8 @@ public class MysteryShip : MonoBehaviour
     {
         transform.position += Vector3.right * speed * Time.deltaTime;
 
-        if (transform.position.x >= _rightDestination.x) {
+        if (transform.position.x >= _rightDestination.x) 
+        {
             Despawn();
         }
     }
@@ -86,7 +91,8 @@ public class MysteryShip : MonoBehaviour
     {
         transform.position += Vector3.left * speed * Time.deltaTime;
 
-        if (transform.position.x <= _leftDestination.x) {
+        if (transform.position.x <= _leftDestination.x) 
+        {
             Despawn();
         }
     }
@@ -97,9 +103,12 @@ public class MysteryShip : MonoBehaviour
     {
         _direction *= -1;
 
-        if (_direction == 1) {
+        if (_direction == 1) 
+        {
             transform.position = _leftDestination;
-        } else {
+        } 
+        else 
+        {
             transform.position = _rightDestination;
         }
 
@@ -112,9 +121,12 @@ public class MysteryShip : MonoBehaviour
     {
         _spawned = false;
 
-        if (_direction == 1) {
+        if (_direction == 1) 
+        {
             transform.position = _rightDestination;
-        } else {
+        } 
+        else 
+        {
             transform.position = _leftDestination;
         }
 
@@ -130,7 +142,8 @@ public class MysteryShip : MonoBehaviour
         {
             Despawn();
 
-            if (killed != null) {
+            if (killed != null) 
+            {
                 killed.Invoke(this);
             }
         }

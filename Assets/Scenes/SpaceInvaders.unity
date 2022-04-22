@@ -373,8 +373,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  cycleTime: 30
-  score: 300
+  cycleTime: 20
+  score: 200
 --- !u!1 &205564194
 GameObject:
   m_ObjectHideFlags: 0
@@ -1384,7 +1384,7 @@ GameObject:
   - component: {fileID: 709954586}
   m_Layer: 6
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2109,6 +2109,9 @@ MonoBehaviour:
   _initialPosition: {x: 0, y: 20}
   missilePrefab: {fileID: -1081096913648160214, guid: dc9d721412f5fde46802e7cb3f95bea2, type: 3}
   missileAttackRate: 1
+  coinPrefab: {fileID: 505959910638535919, guid: 47763009f90983f4d9397d95e4993882, type: 3}
+  lifePrefab: {fileID: 2367179996095141390, guid: 4854da9e3ef47d0448c106efda980d7a, type: 3}
+  healthPrefab: {fileID: 6214840012224283053, guid: 982bb7d6e6df7af47897acf20eafc4a9, type: 3}
 --- !u!4 &1049431289
 Transform:
   m_ObjectHideFlags: 0

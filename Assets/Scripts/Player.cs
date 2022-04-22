@@ -37,7 +37,8 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (!grace) {
+        if (!grace) 
+        {
             // Retrieving the current player position to perform operations om
             Vector3 position = transform.position;
             // Setting the boundaries for the players left and right movement
@@ -45,16 +46,22 @@ public class Player : MonoBehaviour
             Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right);
             
             // Transform position to left/right if a left/right input is receieved from the user
-            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) {
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) 
+            {
                 position.x -= this.shipStats.shipSpeed * Time.deltaTime;
-            } else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) {
+            } 
+            else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) 
+            {
                 position.x += this.shipStats.shipSpeed * Time.deltaTime;
             }
 
             // If the player is past the world-space view, then move to the opposite side
-            if (position.x < leftEdge.x - 1.0f) {
+            if (position.x < leftEdge.x - 1.0f) 
+            {
                 position.x = rightEdge.x + 1.0f;
-            } else if (position.x > rightEdge.x + 1.0f) {
+            } 
+            else if (position.x > rightEdge.x + 1.0f) 
+            {
                 position.x = leftEdge.x - 1.0f;
             }
 
@@ -62,9 +69,36 @@ public class Player : MonoBehaviour
             transform.position = position;
 
             // Call function to shoot if space key is pressed or left mouse button is clicked
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) {
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) 
+            {
                 StartCoroutine(Shoot());
             }
+        }
+    }
+
+    public void AddHealth()
+    {
+        if (shipStats.currentHealth == shipStats.maxHealth)
+        {
+            UIManager.SetScore(50);
+        }
+        else
+        {
+            shipStats.currentHealth++;
+            UIManager.SetHealthbar(shipStats.currentHealth);
+        }
+    }
+
+    public void AddLife()
+    {
+        if (shipStats.currentLives == shipStats.maxLives)
+        {
+            UIManager. SetScore(100);
+        }
+        else
+        {
+            shipStats.currentLives++;
+            UIManager.SetLives(shipStats.currentLives);
         }
     }
 
@@ -99,12 +133,16 @@ public class Player : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         // Checking if the player collides with an invader or a missile
-        if (other.gameObject.layer == LayerMask.NameToLayer("Invader")) {
-            if (killed != null) {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Invader")) 
+        {
+            if (killed != null) 
+            {
                 // Invoke the kill system action killed
                 killed.Invoke();
             }
-        } else if (other.gameObject.layer == LayerMask.NameToLayer("Missile")) {
+        } 
+        else if (other.gameObject.layer == LayerMask.NameToLayer("Missile")) 
+        {
             TakeDamage();
         }
     }
