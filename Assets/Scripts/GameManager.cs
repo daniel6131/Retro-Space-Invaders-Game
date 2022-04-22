@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -11,6 +12,9 @@ public sealed class GameManager : MonoBehaviour
     private Invaders invaders;
     private MysteryShip mysteryShip;
 
+    public int countdownTime;
+    [SerializeField] Text countdownDisplay;
+
     // Each time the scene instantiates:
     private void Start()
     {
@@ -20,6 +24,26 @@ public sealed class GameManager : MonoBehaviour
         mysteryShip.killed += OnMysteryShipKilled;
         // The method new game is called to reset and restart a game
         NewGame();
+    }
+
+    // Countsdown from 3 to 0 to notify the user when they can start playing
+    private IEnumerator CountdownToStart()
+    {
+        countdownDisplay.gameObject.SetActive(true);
+        countdownTime = 3;
+        while (countdownTime > 0)
+        {
+            countdownDisplay.text = countdownTime.ToString();
+
+            yield return new WaitForSeconds(1f);
+
+            countdownTime--;
+        }
+
+        countdownDisplay.text = "GO";
+
+        yield return new WaitForSeconds(0.4f);
+        countdownDisplay.gameObject.SetActive(false);
     }
 
     // Method constantly checks to see;
@@ -54,6 +78,7 @@ public sealed class GameManager : MonoBehaviour
     // This resets the invaders grid and bunkers back to default and calls the respawn method
     private void NewRound()
     {
+        StartCoroutine(CountdownToStart());
         // Increment current wave
         UIManager.SetWave();
 
@@ -63,6 +88,7 @@ public sealed class GameManager : MonoBehaviour
 
         // Calls the ResetInvaders method to reposition invaders, and set the invaders grid to be visible
         StartCoroutine(invaders.ResetInvaders());
+        StartCoroutine(mysteryShip.SpawningGrace());
         invaders.gameObject.SetActive(true);
 
         Respawn();
@@ -76,6 +102,7 @@ public sealed class GameManager : MonoBehaviour
         player.transform.position = position;
         player.shipStats.currentHealth = player.shipStats.maxHealth;
         player.gameObject.SetActive(true);
+        StartCoroutine(player.SpawningGrace());
     }
 
     // This method controls the behaviour when the player has lost all lives;

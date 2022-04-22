@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class MysteryShip : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class MysteryShip : MonoBehaviour
     public Vector3 _leftDestination { get; private set; }
     public Vector3 _rightDestination { get; private set; }
 
+    // Bool representing state of initial game killing grace period
+    private bool grace = true;
+
     private void Start()
     {
         // Transform the viewport to world coordinates so we can set the mystery
@@ -36,20 +40,32 @@ public class MysteryShip : MonoBehaviour
 
         transform.position = _leftDestination;
         Despawn();
+
+        StartCoroutine(SpawningGrace());
+    }
+
+    // When the game starts, a grace period begins to stopm player from killing invaders too soon
+    public IEnumerator SpawningGrace()
+    {
+        grace = true;
+        yield return new WaitForSeconds(3);
+        grace = false;
     }
 
     // Constantly checking if the mystery ship is in scene or not
-    // and determining whether the ship need to move from left to right or right to left
+    // and determining whether the ship needs to move from left to right or right to left
     private void Update()
     {
-        if (!_spawned) {
-            return;
-        }
+        if (!grace) {
+            if (!_spawned) {
+                return;
+            }
 
-        if (_direction == 1) {
-            MoveRight();
-        } else {
-            MoveLeft();
+            if (_direction == 1) {
+                MoveRight();
+            } else {
+                MoveLeft();
+            }
         }
     }
 

@@ -28,9 +28,10 @@ public class Player : MonoBehaviour
     }
 
     // When the game starts, a grace period begins to stopm player from killing invaders too soon
-    private IEnumerator SpawningGrace()
+    public IEnumerator SpawningGrace()
     {
-        yield return new WaitForSeconds(3);
+        grace = true;
+        yield return new WaitForSeconds(3.5f);
         grace = false;
     }
 

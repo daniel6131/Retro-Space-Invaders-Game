@@ -24,7 +24,7 @@ public class Invaders : MonoBehaviour
     public float missileAttackRate = 1.0f;
 
     // Bool to represent whether the invaders are in the process of entering or not
-    private bool entering = true;
+    private bool entering;
     private bool respawning = false;
 
     // Initialising values to be used to calculate the invaders speed and missile spawn rate
@@ -151,13 +151,14 @@ public class Invaders : MonoBehaviour
         _direction = Vector3.right;
         transform.position = _initialPosition;
 
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(2);
 
         respawning = false;
         entering = true;
 
         // For every invader in the grid, reset them to be visible if they are not already
         foreach (Transform invader in transform) {
+            invader.gameObject.SetActive(false);
             invader.gameObject.SetActive(true);
         }
     }
