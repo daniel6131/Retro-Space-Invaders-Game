@@ -57,7 +57,7 @@ public class Shop : MonoBehaviour
             healthButton.interactable = false;
         }
 
-        if (currentFireRate > 0.2)
+        if (currentFireRate > 0.2f)
         {
             nextFireRateCost = 0;
 
@@ -111,7 +111,7 @@ public class Shop : MonoBehaviour
             Inventory.currentCoins -= nextFireRateCost;
             currentCoins.text = Inventory.currentCoins + "G";
 
-            player.shipStats.fireRate++;
+            player.shipStats.fireRate -= 0.1f;
             currentFireRate = player.shipStats.fireRate;
 
             SaveManager.SaveProgress();

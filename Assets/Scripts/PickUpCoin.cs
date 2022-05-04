@@ -4,7 +4,8 @@ public class PickUpCoin : PickUp
 {
     public override void PickMeUp()
     {
-        Inventory.currentCoins++;
+        GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().AddCoin();
+        Inventory.currentCoins += 10;
         UIManager.SetCoins();
         Destroy(gameObject);
     }

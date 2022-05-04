@@ -26,12 +26,11 @@ public sealed class GameManager : MonoBehaviour
     private void Start()
     {
         instance.invaders.gameObject.SetActive(false);
-        HideGame();
+        HideBunkers();
     }
 
-    public static void HideGame()
+    public static void HideBunkers()
     {
-        instance.player.gameObject.SetActive(false);
         foreach (Bunker bunker in instance.bunkers)
         {
             bunker.gameObject.SetActive(false);
@@ -154,6 +153,7 @@ public sealed class GameManager : MonoBehaviour
     // This method controls the behaviour when the player has lost all lives;
     private void GameOver()
     {
+        MenuManager.OpenGameOver();
         instance.mysteryShip.FreezeShip();
         AudioManager.StopBattleMusic();
         // The gameover UI is displayed with a retry message
@@ -165,7 +165,7 @@ public sealed class GameManager : MonoBehaviour
     }
 
     // This method controls the game behavour when the player has been killed:
-    private void OnPlayerKilled()
+    private void OnPlayerKilled(bool isInvader)
     {
         AudioManager.PlaySoundEffect(playerDeathSFX);
         instance.player.gameObject.SetActive(false);
@@ -176,14 +176,19 @@ public sealed class GameManager : MonoBehaviour
         instance.roundRespawn = true;
 
         // If the player still has sufficient lives
+        if (isInvader)
+        {
+            instance.player.gameObject.SetActive(true);
+            instance.GameOver();
+        }
+
         if (instance.player.shipStats.currentLives > 0) 
         {
-            // // Start a new round
-            // Invoke(nameof(NewRound), 1f);
             instance.Invoke(nameof(Respawn), 1f);
         } 
         else 
         {
+            instance.player.gameObject.SetActive(true);
             instance.GameOver();
         }
     }

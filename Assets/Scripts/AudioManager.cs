@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
@@ -52,6 +53,10 @@ public class AudioManager : MonoBehaviour
         if (muted)
         {
             AudioListener.pause = true;
+        }
+        else
+        {
+            AudioListener.pause = false;
         }
     }
 

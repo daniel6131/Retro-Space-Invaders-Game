@@ -9,9 +9,10 @@ public class Player : MonoBehaviour
     [SerializeField] AudioClip shootSFX;
     [SerializeField] AudioClip healthSFX;
     [SerializeField] AudioClip lifeSFX;
+    [SerializeField] AudioClip coinSFX;
 
     public Projectile laserPrefab;
-    public System.Action killed;
+    public System.Action<bool> killed;
     private bool _laserActive;
 
     // Bool representing state of initial game killing grace period
@@ -112,6 +113,11 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void AddCoin()
+    {
+        AudioManager.PlaySoundEffect(coinSFX);
+    }
+
     private IEnumerator Shoot()
     {
         // Only shoot if there is currently not an active laser on the game
@@ -137,7 +143,7 @@ public class Player : MonoBehaviour
         if(shipStats.currentHealth <= 0)
         {
             // Invoke the kill system action killed
-            killed.Invoke();
+            killed(false);
             _laserActive = false;
         }
     }
@@ -150,7 +156,7 @@ public class Player : MonoBehaviour
             if (killed != null) 
             {
                 // Invoke the kill system action killed
-                killed.Invoke();
+                killed(true);
             }
         } 
         else if (other.gameObject.layer == LayerMask.NameToLayer("Missile")) 

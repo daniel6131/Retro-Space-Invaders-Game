@@ -728,7 +728,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &122828516
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2311,7 +2311,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &551462906
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3400,6 +3400,7 @@ MonoBehaviour:
   shootSFX: {fileID: 8300000, guid: 3002cbd6f0d14714689a21a20d68b567, type: 3}
   healthSFX: {fileID: 8300000, guid: da7201d95a5f15940b7ee96ca57cd734, type: 3}
   lifeSFX: {fileID: 8300000, guid: 0a854427a2d2a2c43a9557d2b1185577, type: 3}
+  coinSFX: {fileID: 8300000, guid: 33b171e3fcc6132428b9cb667c035896, type: 3}
   laserPrefab: {fileID: -5637204446194996645, guid: 2a74a778d81133742a3c36c9deb2e7c8, type: 3}
 --- !u!50 &709954586
 Rigidbody2D:
@@ -5141,6 +5142,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   battleMusicSource: {fileID: 1202557647}
   sfxSource: {fileID: 1202557646}
+  muteStates:
+  - {fileID: 21300000, guid: 686590d0e47ec854e89070c9fe837916, type: 3}
+  - {fileID: 21300000, guid: 8974f3594febaa548a6c43e4b0b0b73d, type: 3}
 --- !u!4 &1202557649
 Transform:
   m_ObjectHideFlags: 0
@@ -13242,7 +13246,7 @@ GameObject:
   - component: {fileID: 1997403510}
   - component: {fileID: 1997403509}
   m_Layer: 5
-  m_Name: MusicButton
+  m_Name: MuteButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13310,7 +13314,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1997403510}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1202557648}
+        m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
+        m_MethodName: ToggleMute
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1997403510
 MonoBehaviour:
   m_ObjectHideFlags: 0

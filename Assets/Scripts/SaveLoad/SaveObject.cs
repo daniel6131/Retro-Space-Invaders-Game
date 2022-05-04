@@ -16,7 +16,7 @@ public class SaveObject
         shipStats = new ShipStats();
         shipStats.maxHealth = 1;
         shipStats.maxLives = 3;
-        shipStats.shipSpeed = 3;
+        shipStats.shipSpeed = 10;
         shipStats.fireRate = 1f;
     }
 }
