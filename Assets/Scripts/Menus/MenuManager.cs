@@ -45,6 +45,7 @@ public class MenuManager : MonoBehaviour
 
     public void OpenShop()
     {
+        GameManager.HideGame();
         instance.mainMenu.SetActive(false);
         instance.shopMenu.SetActive(true);
     }

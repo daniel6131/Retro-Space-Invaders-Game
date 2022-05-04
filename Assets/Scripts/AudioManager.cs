@@ -58,9 +58,9 @@ public class AudioManager : MonoBehaviour
     public static void PlayBattleMusic()
     {
         instance.battleMusicSource.Play();
-        // instance.delay = 1;
-        // instance.isPlaying = true;
-        // instance.StartCoroutine(instance.BattleSound());
+        instance.delay = 1;
+        instance.isPlaying = true;
+        instance.StartCoroutine(instance.BattleSound());
     }
 
     public static void StopBattleMusic()

@@ -16,6 +16,7 @@ public class SaveLoad
         {
             Directory.CreateDirectory(Application.persistentDataPath + "/" + directoryName);
         }
+        
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(GetSavePath());
         bf.Serialize(file, so);
@@ -42,6 +43,13 @@ public class SaveLoad
             }
 
         }
+        else
+        {
+            SaveState(so);
+        }
+
+        so.shipStats.currentLives = so.shipStats.maxLives;
+        so.shipStats.currentHealth = so.shipStats.maxHealth;
 
         return so;
     }

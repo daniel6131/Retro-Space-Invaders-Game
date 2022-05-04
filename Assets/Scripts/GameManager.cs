@@ -25,7 +25,17 @@ public sealed class GameManager : MonoBehaviour
 
     private void Start()
     {
-         instance.invaders.gameObject.SetActive(false);
+        instance.invaders.gameObject.SetActive(false);
+        HideGame();
+    }
+
+    public static void HideGame()
+    {
+        instance.player.gameObject.SetActive(false);
+        foreach (Bunker bunker in instance.bunkers)
+        {
+            bunker.gameObject.SetActive(false);
+        }
     }
 
     // Each time the scene instantiates:

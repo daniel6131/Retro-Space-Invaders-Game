@@ -31,6 +31,8 @@ public class SaveManager : MonoBehaviour
         so.coins = Inventory.currentCoins;
         so.highscore = UIManager.GetHighscore();
         so.shipStats = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().shipStats;
+
+        SaveLoad.SaveState(so);
     }
 
     // Load in save object from saveload script, set the game states to match that of the save
