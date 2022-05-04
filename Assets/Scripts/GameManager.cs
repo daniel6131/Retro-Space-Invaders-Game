@@ -112,11 +112,11 @@ public sealed class GameManager : MonoBehaviour
         UIManager.SetScore(0);
         UIManager.SetLives(instance.player.shipStats.maxLives);
 
-        instance.NewRound();
+        NewRound();
     }
 
     // This resets the invaders grid and bunkers back to default and calls the respawn method
-    private void NewRound()
+    public static void NewRound()
     {
         instance.StartCoroutine(instance.CountdownToStart());
         // Increment current wave
@@ -205,7 +205,7 @@ public sealed class GameManager : MonoBehaviour
         if (instance.invaders.invadersKilled == instance.invaders.totalInvaders) 
         {
             AudioManager.PlaySoundEffect(waveCompleteSFX);
-            instance.NewRound();
+            NewRound();
         }
     }
 

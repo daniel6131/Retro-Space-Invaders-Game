@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEditor;
 
 public class MenuManager : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class MenuManager : MonoBehaviour
     [SerializeField] AudioClip mainMenuSFX;
     [SerializeField] AudioClip pauseInSFX;
     [SerializeField] AudioClip pauseOutSFX;
+    [SerializeField] AudioClip noSale;
+    [SerializeField] AudioClip sale;
 
     public static MenuManager instance;
 
@@ -37,10 +40,45 @@ public class MenuManager : MonoBehaviour
         instance.inGameMenu.SetActive(false);
     }
 
+    [MenuItem("Cheats/OpenGameOver")]
     public static void OpenGameOver()
     {
+        Time.timeScale = 0;
+        UIManager.HighScoreCheck();
+
         instance.gameOverMenu.SetActive(true);
         instance.inGameMenu.SetActive(false);
+    }
+
+    public static void GameOverToMainMenu()
+    {
+        Time.timeScale = 1;
+
+        instance.gameOverMenu.SetActive(false);
+        instance.shopMenu.SetActive(false);
+        instance.pauseMenu.SetActive(false);
+        instance.inGameMenu.SetActive(false);
+        instance.mainMenu.SetActive(true);
+        
+        AudioManager.PlaySoundEffect(instance.mainMenuSFX);
+        GameManager.CancelGame();
+    }
+
+    public static void Retry()
+    {
+        if (GameOver.Retry())
+        {
+            AudioManager.PlaySoundEffect(instance.sale);
+            GameManager.NewRound();
+
+            Time.timeScale = 1;
+            instance.gameOverMenu.SetActive(false);
+            instance.inGameMenu.SetActive(true);
+        }
+        else
+        {
+            AudioManager.PlaySoundEffect(instance.noSale);
+        }
     }
 
     public void OpenShop()

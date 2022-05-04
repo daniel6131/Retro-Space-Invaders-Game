@@ -74,6 +74,15 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public static void HighScoreCheck()
+    {
+        if (instance.highscore < instance.score)
+        {
+            SetHighscore(instance.score);
+            SaveManager.SaveProgress();
+        }
+    }
+
     public static int GetHighscore()
     {
         return instance.highscore;
@@ -88,7 +97,7 @@ public class UIManager : MonoBehaviour
 
     public static void SetCoins()
     {
-        instance.coinsText.text = Inventory.currentCoins.ToString();
+        instance.coinsText.text = Inventory.currentCoins.ToString().PadLeft(4, '0');
     }
 
     public static void ResetUI()

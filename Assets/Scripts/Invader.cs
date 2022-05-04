@@ -16,7 +16,7 @@ public class Invader : MonoBehaviour
 
     private const int LIFE_CHANCE = 1;
     private const int HEALTH_CHANCE = 10;
-    private const int COIN_CHANCE = 1000;
+    private const int COIN_CHANCE = 50;
 
     // Handling the collisions between a laser and a invader
     private void OnTriggerEnter2D(Collider2D other)

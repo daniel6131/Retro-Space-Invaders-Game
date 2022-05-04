@@ -85,7 +85,7 @@ public class Shop : MonoBehaviour
 
     public void BuyHealth()
     {
-        if (PriceCheck(nextHealthCost))
+        if (PriceCheck.Check(nextHealthCost))
         {
             Inventory.currentCoins -= nextHealthCost;
             currentCoins.text = Inventory.currentCoins + "G";
@@ -106,7 +106,7 @@ public class Shop : MonoBehaviour
 
     public void BuyFireRate()
     {
-        if (PriceCheck(nextFireRateCost))
+        if (PriceCheck.Check(nextFireRateCost))
         {
             Inventory.currentCoins -= nextFireRateCost;
             currentCoins.text = Inventory.currentCoins + "G";
@@ -122,18 +122,6 @@ public class Shop : MonoBehaviour
         else
         {
             AudioManager.PlaySoundEffect(noSale);
-        }
-    }
-
-    private bool PriceCheck(int cost)
-    {
-        if (Inventory.currentCoins >= cost)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
         }
     }
 

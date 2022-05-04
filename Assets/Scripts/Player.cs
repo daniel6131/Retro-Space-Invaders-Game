@@ -49,10 +49,10 @@ public class Player : MonoBehaviour
         if (!_grace) 
         {
             // Retrieving the current player position to perform operations om
-            Vector3 position = transform.position;
+            Vector2 position = transform.position;
             // Setting the boundaries for the players left and right movement
-            Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero);
-            Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right);
+            Vector2 leftEdge = Camera.main.ViewportToWorldPoint(Vector2.zero);
+            Vector2 rightEdge = Camera.main.ViewportToWorldPoint(Vector2.right);
             
             // Transform position to left/right if a left/right input is receieved from the user
             if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) 
