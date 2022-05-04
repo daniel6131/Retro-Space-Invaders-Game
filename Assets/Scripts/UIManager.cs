@@ -90,4 +90,12 @@ public class UIManager : MonoBehaviour
     {
         instance.coinsText.text = Inventory.currentCoins.ToString();
     }
+
+    public static void ResetUI()
+    {
+        instance.score = 0;
+        instance.wave = 0;
+        instance.scoreText.text = instance.score.ToString().PadLeft(4, '0');
+        instance.waveText.text = instance.wave.ToString();
+    }
 }

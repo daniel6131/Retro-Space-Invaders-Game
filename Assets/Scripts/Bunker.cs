@@ -7,11 +7,14 @@ public class Bunker : MonoBehaviour
     public Sprite[] states;
     private int health;
 
+    [SerializeField] AudioClip destroySFX;
+
     public SpriteRenderer spriteRenderer { get; private set; }
 
     // When the bunker experiences a collision, the behaviour depends on the game object it is colliding with;
     private void OnTriggerEnter2D(Collider2D other)
     {
+        AudioManager.PlaySoundEffect(destroySFX);
         // If its an invader then the bunker will be instantly destroyed
         if (other.gameObject.layer == LayerMask.NameToLayer("Invader")) {
             gameObject.SetActive(false);

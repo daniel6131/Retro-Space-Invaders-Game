@@ -20,3 +20,4 @@ public class SaveObject
         shipStats.fireRate = 0.5f;
     }
 }
+ 

@@ -17,150 +17,203 @@ public sealed class GameManager : MonoBehaviour
     public int countdownTime;
     [SerializeField] Text countdownDisplay;
 
-    // Each time the scene instantiates:
+    [SerializeField] AudioClip playerDeathSFX;
+    [SerializeField] AudioClip enemyDeathSFX;
+    [SerializeField] AudioClip waveCompleteSFX;
+
+    private static GameManager instance;
+
     private void Start()
     {
+         instance.invaders.gameObject.SetActive(false);
+    }
+
+    // Each time the scene instantiates:
+    public static void GameStart()
+    {
         // The killed variables for each are reset
-        player.killed += OnPlayerKilled;
-        invaders.killed += OnInvaderKilled;
-        mysteryShip.killed += OnMysteryShipKilled;
+        instance.player.killed += instance.OnPlayerKilled;
+        instance.invaders.killed += instance.OnInvaderKilled;
+        instance.mysteryShip.killed += instance.OnMysteryShipKilled;
         // The method new game is called to reset and restart a game
-        NewGame();
+        instance.NewGame();
     }
 
     // Countsdown from 3 to 0 to notify the user when they can start playing
     private IEnumerator CountdownToStart()
     {
-        countdownDisplay.gameObject.SetActive(true);
-        countdownTime = 3;
-        while (countdownTime > 0)
+        AudioManager.UpdateBattleMusicDelay(1);
+        AudioManager.StopBattleMusic();
+        instance.countdownDisplay.gameObject.SetActive(true);
+        instance.countdownTime = 3;
+        while (instance.countdownTime > 0)
         {
-            countdownDisplay.text = countdownTime.ToString();
+            instance.countdownDisplay.text = instance.countdownTime.ToString();
 
             yield return new WaitForSeconds(1f);
 
-            countdownTime--;
+            instance.countdownTime--;
         }
 
-        countdownDisplay.text = "GO";
+        instance.countdownDisplay.text = "GO";
+
+        AudioManager.PlayBattleMusic();
 
         yield return new WaitForSeconds(0.4f);
-        countdownDisplay.gameObject.SetActive(false);
+        instance.countdownDisplay.gameObject.SetActive(false);
     }
 
     // Method constantly checks to see;
     private void Update()
     {
         // Whether the player has run out of lives and has chosen to start a new game
-        if (player.shipStats.currentLives <= 0 && Input.GetKeyDown(KeyCode.Return)) 
+        if (instance.player.shipStats.currentLives <= 0 && Input.GetKeyDown(KeyCode.Return)) 
         {
             // If this criteria is fulfilled, then a new game can be started
-            NewGame();
+            instance.NewGame();
         }
     }
 
     // Upon loading obtain the game objects for all game assets
     private void Awake()
     {
-        player = FindObjectOfType<Player>();
-        bunkers = FindObjectsOfType<Bunker>();
-        invaders = FindObjectOfType<Invaders>();
-        mysteryShip = FindObjectOfType<MysteryShip>();
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        instance.player = FindObjectOfType<Player>();
+        instance.bunkers = FindObjectsOfType<Bunker>();
+        instance.invaders = FindObjectOfType<Invaders>();
+        instance.mysteryShip = FindObjectOfType<MysteryShip>();
     }
 
     // Method that is called when a fresh/new instance of a game needs to occur
     private void NewGame()
     {
-        gameOverUI.SetActive(false);
+        instance.player.gameObject.SetActive(true);
+        instance.player.StartSpawn();
+        instance.invaders.StartSpawn();
+        instance.mysteryShip.StartSpawn();
+        instance.gameOverUI.SetActive(false);
         UIManager.SetScore(0);
-        UIManager.SetLives(player.shipStats.maxLives);
+        UIManager.SetLives(instance.player.shipStats.maxLives);
 
-        NewRound();
+        instance.NewRound();
     }
 
     // This resets the invaders grid and bunkers back to default and calls the respawn method
     private void NewRound()
     {
-        StartCoroutine(CountdownToStart());
+        instance.StartCoroutine(instance.CountdownToStart());
         // Increment current wave
         UIManager.SetWave();
 
-        for (int i = 0; i < bunkers.Length; i++) 
+        for (int i = 0; i < instance.bunkers.Length; i++) 
         {
-            bunkers[i].ResetBunker();
+            instance.bunkers[i].ResetBunker();
         }
 
         // Calls the ResetInvaders method to reposition invaders, and set the invaders grid to be visible
-        StartCoroutine(invaders.ResetInvaders());
-        StartCoroutine(mysteryShip.SpawningGrace());
-        invaders.gameObject.SetActive(true);
+        instance.StartCoroutine(instance.invaders.ResetInvaders());
+        instance.StartCoroutine(instance.mysteryShip.SpawningGrace());
+        instance.invaders.gameObject.SetActive(true);
 
-        Respawn();
+        instance.Respawn();
     }
 
     // Reset the player back to the default position after dying
     private void Respawn()
     {
-        Vector3 position = player.transform.position;
+        Vector3 position = instance.player.transform.position;
         position.x = 0f;
-        player.transform.position = position;
-        player.shipStats.currentHealth = player.shipStats.maxHealth;
-        UIManager.SetHealthbar(player.shipStats.currentHealth);
-        player.gameObject.SetActive(true);
+        instance.player.transform.position = position;
+        instance.player.shipStats.currentHealth = instance.player.shipStats.maxHealth;
+        UIManager.SetHealthbar(instance.player.shipStats.currentHealth);
+        instance.player.gameObject.SetActive(true);
         if (!roundRespawn) {
-            StartCoroutine(player.SpawningGrace());
+            instance.StartCoroutine(instance.player.SpawningGrace());
         }
-        roundRespawn = false;
+        instance.roundRespawn = false;
     }
 
     // This method controls the behaviour when the player has lost all lives;
     private void GameOver()
     {
+        instance.mysteryShip.FreezeShip();
+        AudioManager.StopBattleMusic();
         // The gameover UI is displayed with a retry message
-        gameOverUI.SetActive(true);
+        instance.gameOverUI.SetActive(true);
         // Invaders grid is removed from the scene
-        invaders.gameObject.SetActive(false);
+        instance.invaders.gameObject.SetActive(false);
+        instance.invaders.CancelInvoke();
         SaveManager.SaveProgress();
     }
 
     // This method controls the game behavour when the player has been killed:
     private void OnPlayerKilled()
     {
-        player.gameObject.SetActive(false);
+        AudioManager.PlaySoundEffect(playerDeathSFX);
+        instance.player.gameObject.SetActive(false);
 
-        player.shipStats.currentLives--;
-        UIManager.SetLives(player.shipStats.currentLives);
+        instance.player.shipStats.currentLives--;
+        UIManager.SetLives(instance.player.shipStats.currentLives);
 
-        roundRespawn = true;
+        instance.roundRespawn = true;
 
         // If the player still has sufficient lives
-        if (player.shipStats.currentLives > 0) 
+        if (instance.player.shipStats.currentLives > 0) 
         {
             // // Start a new round
             // Invoke(nameof(NewRound), 1f);
-            Invoke(nameof(Respawn), 1f);
+            instance.Invoke(nameof(Respawn), 1f);
         } 
         else 
         {
-            GameOver();
+            instance.GameOver();
         }
     }
 
     // When an invader is killed, increment the player's score based on the assigned score for that invader
     private void OnInvaderKilled(Invader invader)
     {
+        AudioManager.PlaySoundEffect(enemyDeathSFX);
         UIManager.SetScore(invader.score);
 
+        AudioManager.UpdateBattleMusicDelay(instance.invaders.invadersAlive);
+
         // If all invaders are killed, then a new round can begin
-        if (invaders.invadersKilled == invaders.totalInvaders) 
+        if (instance.invaders.invadersKilled == instance.invaders.totalInvaders) 
         {
-            NewRound();
+            AudioManager.PlaySoundEffect(waveCompleteSFX);
+            instance.NewRound();
         }
     }
 
      // When the mystery ship is killed, update the players score accordingly
     private void OnMysteryShipKilled(MysteryShip mysteryShip)
     {
-        UIManager.SetScore(mysteryShip.score);
+        AudioManager.PlaySoundEffect(enemyDeathSFX);
+        UIManager.SetScore(instance.mysteryShip.score);
+    }
+
+    public static void CancelGame()
+    {
+        instance.StopAllCoroutines();
+
+        if (instance.invaders != null)
+        {
+            instance.invaders.gameObject.SetActive(false);
+        }
+
+        instance.player.FreezeShip();
+        instance.mysteryShip.FreezeShip();
+
+        UIManager.ResetUI();
+        AudioManager.StopBattleMusic();
     }
 }

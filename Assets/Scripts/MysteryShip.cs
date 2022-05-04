@@ -8,6 +8,7 @@ public class MysteryShip : MonoBehaviour
     // The rate at which the mystery ship will appear on the scene
     public float cycleTime = 30f;
     public int score = 300;
+    public GameObject explosion;
     public System.Action<MysteryShip> killed;
 
     // The initial direction of the mystery ship
@@ -20,9 +21,9 @@ public class MysteryShip : MonoBehaviour
     public Vector3 _rightDestination { get; private set; }
 
     // Bool representing state of initial game killing grace period
-    private bool grace = true;
+    private bool _grace = true;
 
-    private void Start()
+    public void StartSpawn()
     {
         // Transform the viewport to world coordinates so we can set the mystery
         // ship's destination points to the ends of the scene
@@ -47,16 +48,21 @@ public class MysteryShip : MonoBehaviour
     // When the game starts, a grace period begins to stopm player from killing invaders too soon
     public IEnumerator SpawningGrace()
     {
-        grace = true;
+        _grace = true;
         yield return new WaitForSeconds(3);
-        grace = false;
+        _grace = false;
+    }
+
+    public void FreezeShip()
+    {
+        _grace = true;
     }
 
     // Constantly checking if the mystery ship is in scene or not
     // and determining whether the ship needs to move from left to right or right to left
     private void Update()
     {
-        if (!grace) 
+        if (!_grace) 
         {
             if (!_spawned) 
             {
@@ -145,6 +151,7 @@ public class MysteryShip : MonoBehaviour
             if (killed != null) 
             {
                 killed.Invoke(this);
+                Instantiate(explosion, transform.position, Quaternion.identity);
             }
         }
     }

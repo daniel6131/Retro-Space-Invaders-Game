@@ -14,10 +14,13 @@ public class Invaders : MonoBehaviour
     // The inital direction the invaders move
     public Vector3 _direction { get; private set; } = Vector3.right;
     // Initial position of the invaders
-    public Vector2 _initialPosition = new Vector2(0,20);
+    public Vector2 _initialPosition { get; private set; } = new Vector2(0,20);
     // Y value which we want the invaders grid to start functioning at
     private const float START_Y = 3.5f;
     public System.Action<Invader> killed;
+
+    [SerializeField] AudioClip shootSFX;
+    [SerializeField] AudioClip spawnSFX;
 
     public Projectile missilePrefab;
     // How often there will be missiles
@@ -61,7 +64,7 @@ public class Invaders : MonoBehaviour
         }
     }
 
-    private void Start()
+    public void StartSpawn()
     {
         InvokeRepeating(nameof(MissileAttack), this.missileAttackRate, this.missileAttackRate);
     }
@@ -136,6 +139,7 @@ public class Invaders : MonoBehaviour
                 if (Random.value < (1.0f / (float)invadersAlive)) 
                 {
                     Instantiate(missilePrefab, invader.position, Quaternion.identity);
+                    AudioManager.PlaySoundEffect(shootSFX);
                     // Only one missile should be active, so break here in order to spawn no more
                     break;
                 }
@@ -162,6 +166,7 @@ public class Invaders : MonoBehaviour
         transform.position = _initialPosition;
 
         yield return new WaitForSeconds(2);
+        AudioManager.PlaySoundEffect(spawnSFX);
 
         respawning = false;
         entering = true;

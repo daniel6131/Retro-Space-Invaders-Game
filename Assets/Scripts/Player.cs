@@ -5,17 +5,20 @@ public class Player : MonoBehaviour
 {
     // Reference to the player's ship stats
     public ShipStats shipStats;
+    
+    [SerializeField] AudioClip shootSFX;
+    [SerializeField] AudioClip healthSFX;
+    [SerializeField] AudioClip lifeSFX;
 
     public Projectile laserPrefab;
-
     public System.Action killed;
     private bool _laserActive;
 
     // Bool representing state of initial game killing grace period
-    private bool grace = true;
+    private bool _grace = true;
 
     // Set the ship's health and lives accoridng to the maximum the player gives
-    private void Start()
+    public void StartSpawn()
     {
         shipStats.currentHealth = shipStats.maxHealth;
         shipStats.currentLives = shipStats.maxLives;
@@ -27,17 +30,22 @@ public class Player : MonoBehaviour
 
     }
 
+    public void FreezeShip()
+    {
+        _grace = true;
+    }
+
     // When the game starts, a grace period begins to stopm player from killing invaders too soon
     public IEnumerator SpawningGrace()
     {
-        grace = true;
+        _grace = true;
         yield return new WaitForSeconds(3.5f);
-        grace = false;
+        _grace = false;
     }
 
     private void Update()
     {
-        if (!grace) 
+        if (!_grace) 
         {
             // Retrieving the current player position to perform operations om
             Vector3 position = transform.position;
@@ -78,6 +86,7 @@ public class Player : MonoBehaviour
 
     public void AddHealth()
     {
+        AudioManager.PlaySoundEffect(healthSFX);
         if (shipStats.currentHealth == shipStats.maxHealth)
         {
             UIManager.SetScore(50);
@@ -91,6 +100,7 @@ public class Player : MonoBehaviour
 
     public void AddLife()
     {
+        AudioManager.PlaySoundEffect(lifeSFX);
         if (shipStats.currentLives == shipStats.maxLives)
         {
             UIManager. SetScore(100);
@@ -110,6 +120,7 @@ public class Player : MonoBehaviour
             _laserActive = true;
             // Create laser
             Instantiate(this.laserPrefab, this.transform.position, Quaternion.identity);
+            AudioManager.PlaySoundEffect(shootSFX);
             // Only return according to the ships preset firerate
             yield return new WaitForSeconds(shipStats.fireRate);
             _laserActive = false;
@@ -127,6 +138,7 @@ public class Player : MonoBehaviour
         {
             // Invoke the kill system action killed
             killed.Invoke();
+            _laserActive = false;
         }
     }
 

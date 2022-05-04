@@ -147,6 +147,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score: 20
   explosion: {fileID: 7256969477307220718, guid: 00de40253d246684c85f8b25c93aa530, type: 3}
+  coinPrefab: {fileID: 505959910638535919, guid: 47763009f90983f4d9397d95e4993882, type: 3}
+  lifePrefab: {fileID: 2367179996095141390, guid: 4854da9e3ef47d0448c106efda980d7a, type: 3}
+  healthPrefab: {fileID: 6214840012224283053, guid: 982bb7d6e6df7af47897acf20eafc4a9, type: 3}
 --- !u!95 &-2776889858022447495
 Animator:
   serializedVersion: 3
