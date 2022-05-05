@@ -28,6 +28,8 @@ public sealed class GameManager : MonoBehaviour
 
     private void Start()
     {
+        HideBunkers();
+        instance.mysteryShip.gameObject.SetActive(false);
         instance.invaders.gameObject.SetActive(false);
         HideBunkers();
     }

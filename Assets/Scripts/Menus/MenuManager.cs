@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using System.Collections;
 
 public class MenuManager : MonoBehaviour
 {
@@ -83,15 +84,13 @@ public class MenuManager : MonoBehaviour
 
     public void OpenShop()
     {
-        GameManager.HideBunkers();
-        instance.mainMenu.SetActive(false);
-        instance.shopMenu.SetActive(true);
+        instance.StartCoroutine(MenuAnimator.CloseMainMenuAnimation(instance));
     }
 
     public void CloseShop()
     {
-        instance.mainMenu.SetActive(true);
-        instance.shopMenu.SetActive(false);
+        AudioManager.PlaySoundEffect(mainMenuSFX);
+        instance.StartCoroutine(MenuAnimator.CloseShopMenuAnimation(instance));
     }
 
     public void OpenInGame()
