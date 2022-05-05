@@ -6,6 +6,7 @@ public class FlashEffect : MonoBehaviour
 
     [SerializeField] private Material flashMaterial;
     [SerializeField] private float duration;
+    [SerializeField] private Color[] colours;
 
     // The SpriteRenderer that should flash.
     private SpriteRenderer spriteRenderer;
@@ -31,8 +32,10 @@ public class FlashEffect : MonoBehaviour
         flashMaterial = new Material(flashMaterial);
     }
 
-    public void Flash(Color color)
+    public void Flash(int colourIndex)
     {
+        Color eventColour = colours[colourIndex];
+
         // If the flashRoutine is not null, then it is currently running.
         if (flashRoutine != null)
         {
@@ -42,7 +45,7 @@ public class FlashEffect : MonoBehaviour
         }
 
         // Start the Coroutine, and store the reference for it.
-        flashRoutine = StartCoroutine(FlashRoutine(color));
+        flashRoutine = StartCoroutine(FlashRoutine(eventColour));
     }
 
     private IEnumerator FlashRoutine(Color color)
@@ -63,14 +66,14 @@ public class FlashEffect : MonoBehaviour
         flashRoutine = null;
     }
 
-    public static IEnumerator EffectAnim(int duration, int colourIndex)
+    public IEnumerator EffectAnim(int duration, int colourIndex)
     {
         Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
         for (int f = 0; f <= duration; f++)
         {
-            yield return new WaitForSeconds(0.125f);
-            player.PlayerFlash(colourIndex);
+            yield return new WaitForSeconds(0.5f);
+            Flash(colourIndex);
         }
     }
 }

@@ -13,7 +13,6 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioClip damageSFX;
     
     [SerializeField] private FlashEffect flashEffect;
-    [SerializeField] private Color[] colours;
 
     public Projectile laserPrefab;
     public System.Action<bool> killed;
@@ -120,6 +119,34 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void PickupSpeedBoost()
+    {
+        StartCoroutine(flashEffect.EffectAnim(10, 2));
+        StartCoroutine(BoostSpeed());
+    }
+
+    private IEnumerator BoostSpeed()
+    {
+        float initalSpeed = shipStats.shipSpeed;
+        shipStats.shipSpeed = initalSpeed + 5f;
+        yield return new WaitForSeconds(6f);
+        shipStats.shipSpeed = initalSpeed;
+    }
+
+    public void PickupFireRateBoost()
+    {
+        StartCoroutine(flashEffect.EffectAnim(10, 3));
+        StartCoroutine(BoostFireRate());
+    }
+
+    private IEnumerator BoostFireRate()
+    {
+        float initalFireRate = shipStats.fireRate;
+        shipStats.fireRate = initalFireRate - 0.5f;
+        yield return new WaitForSeconds(6f);
+        shipStats.fireRate = initalFireRate;
+    }
+
     public void AddCoin()
     {
         AudioManager.PlaySoundEffect(coinSFX);
@@ -156,7 +183,7 @@ public class Player : MonoBehaviour
             _laserActive = false;
         } else
         {
-            PlayerFlash(0);
+            flashEffect.Flash(0);
         }
     }
 
@@ -168,12 +195,6 @@ public class Player : MonoBehaviour
     public void HidePlayerPosition()
     {
         transform.position = offScreenPos;
-    }
-
-    public void PlayerFlash(int colourIndex)
-    {
-        Color eventColour = colours[colourIndex];
-        flashEffect.Flash(eventColour);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

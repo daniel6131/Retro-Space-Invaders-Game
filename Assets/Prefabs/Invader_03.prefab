@@ -16,6 +16,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7256969477307220718, guid: 00de40253d246684c85f8b25c93aa530, type: 3}
     - target: {fileID: 57370187049360954, guid: 407e58ed79b3d954198861c0bac8eff0, type: 3}
+      propertyPath: speedPrefab
+      value: 
+      objectReference: {fileID: 6458964704688450706, guid: f02560e1d2b435946b6a807ba5990318, type: 3}
+    - target: {fileID: 57370187049360954, guid: 407e58ed79b3d954198861c0bac8eff0, type: 3}
+      propertyPath: fireratePrefab
+      value: 
+      objectReference: {fileID: 4927869484461966433, guid: be6d78767a19ecf43b6bf4f4ece48fd4, type: 3}
+    - target: {fileID: 57370187049360954, guid: 407e58ed79b3d954198861c0bac8eff0, type: 3}
       propertyPath: animationSprites.Array.size
       value: 2
       objectReference: {fileID: 0}

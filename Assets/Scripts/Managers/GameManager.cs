@@ -22,6 +22,8 @@ public sealed class GameManager : MonoBehaviour
     [SerializeField] private AudioClip mysteryShipSFX;
     [SerializeField] private AudioClip waveCompleteSFX;
 
+    [SerializeField] private FlashEffect flashEffect;
+
     private static GameManager instance;
 
     private void Start()
@@ -148,7 +150,7 @@ public sealed class GameManager : MonoBehaviour
         }
         else
         {
-            instance.StartCoroutine(FlashEffect.EffectAnim(5, 1));
+            instance.StartCoroutine(flashEffect.EffectAnim(5, 1));
         }
 
         instance.roundRespawn = false;

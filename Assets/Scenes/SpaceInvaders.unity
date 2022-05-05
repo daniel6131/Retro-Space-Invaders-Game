@@ -3419,9 +3419,6 @@ MonoBehaviour:
   coinSFX: {fileID: 8300000, guid: 33b171e3fcc6132428b9cb667c035896, type: 3}
   damageSFX: {fileID: 8300000, guid: daf72770145be404686910f934550c09, type: 3}
   flashEffect: {fileID: 709954587}
-  colours:
-  - {r: 0.8018868, g: 0.14751692, b: 0.14751692, a: 1}
-  - {r: 1, g: 1, b: 1, a: 0}
   laserPrefab: {fileID: -5637204446194996645, guid: 2a74a778d81133742a3c36c9deb2e7c8, type: 3}
 --- !u!50 &709954586
 Rigidbody2D:
@@ -3458,6 +3455,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: 840b78f5f9802614badde9b5cc886753, type: 2}
   duration: 0.125
+  colours:
+  - {r: 0.8207547, g: 0.13550194, b: 0.13550194, a: 1}
+  - {r: 1, g: 1, b: 1, a: 0}
+  - {r: 0.003921569, g: 0.53333336, b: 0.9882353, a: 1}
+  - {r: 0.21176471, g: 0.7254902, b: 0.14117648, a: 1}
 --- !u!1 &751248415
 GameObject:
   m_ObjectHideFlags: 0
@@ -11863,6 +11865,7 @@ MonoBehaviour:
   invaderDeathSFX: {fileID: 8300000, guid: bb5ffb8a3b20510469db9a02262bd826, type: 3}
   mysteryShipSFX: {fileID: 8300000, guid: 6d99a49f800025140920c1bdff203c9e, type: 3}
   waveCompleteSFX: {fileID: 8300000, guid: 2772b5f0dfbdee94eb1d1494817830aa, type: 3}
+  flashEffect: {fileID: 709954587}
 --- !u!1 &1704690455
 GameObject:
   m_ObjectHideFlags: 0

@@ -145,11 +145,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4f4f400f7559fd43be763fd27736303, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 20
   explosion: {fileID: 7256969477307220718, guid: 00de40253d246684c85f8b25c93aa530, type: 3}
   coinPrefab: {fileID: 505959910638535919, guid: 47763009f90983f4d9397d95e4993882, type: 3}
   lifePrefab: {fileID: 2367179996095141390, guid: 4854da9e3ef47d0448c106efda980d7a, type: 3}
   healthPrefab: {fileID: 6214840012224283053, guid: 982bb7d6e6df7af47897acf20eafc4a9, type: 3}
+  speedPrefab: {fileID: 6458964704688450706, guid: f02560e1d2b435946b6a807ba5990318, type: 3}
+  fireratePrefab: {fileID: 4927869484461966433, guid: be6d78767a19ecf43b6bf4f4ece48fd4, type: 3}
 --- !u!95 &-2776889858022447495
 Animator:
   serializedVersion: 3

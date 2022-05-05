@@ -13,10 +13,14 @@ public class Invader : MonoBehaviour
     [SerializeField] private GameObject coinPrefab;
     [SerializeField] private GameObject lifePrefab;
     [SerializeField] private GameObject healthPrefab;
+    [SerializeField] private GameObject speedPrefab;
+    [SerializeField] private GameObject fireratePrefab;
 
     private const int LIFE_CHANCE = 1;
     private const int HEALTH_CHANCE = 10;
     private const int COIN_CHANCE = 50;
+    private const int SPEED_CHANCE = 65;
+    private const int FIRERATE_CHANCE = 80;
 
     // Handling the collisions between a laser and a invader
     private void OnTriggerEnter2D(Collider2D other)
@@ -41,7 +45,14 @@ public class Invader : MonoBehaviour
             {
                 Instantiate(coinPrefab, transform.position, Quaternion.identity);
             }
-
+            else if (ran <= SPEED_CHANCE)
+            {
+                Instantiate(speedPrefab, transform.position, Quaternion.identity);
+            }
+            else if (ran <= FIRERATE_CHANCE)
+            {
+                Instantiate(fireratePrefab, transform.position, Quaternion.identity);
+            }
         }
     }
 }
