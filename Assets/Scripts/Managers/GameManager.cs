@@ -14,12 +14,13 @@ public sealed class GameManager : MonoBehaviour
 
     private bool roundRespawn = false;
 
-    public int countdownTime;
+    [SerializeField] private int countdownTime;
     [SerializeField] Text countdownDisplay;
 
-    [SerializeField] AudioClip playerDeathSFX;
-    [SerializeField] AudioClip enemyDeathSFX;
-    [SerializeField] AudioClip waveCompleteSFX;
+    [SerializeField] private AudioClip playerDeathSFX;
+    [SerializeField] private AudioClip invaderDeathSFX;
+    [SerializeField] private AudioClip mysteryShipSFX;
+    [SerializeField] private AudioClip waveCompleteSFX;
 
     private static GameManager instance;
 
@@ -105,9 +106,6 @@ public sealed class GameManager : MonoBehaviour
     private void NewGame()
     {
         instance.player.gameObject.SetActive(true);
-        instance.player.StartSpawn();
-        instance.invaders.StartSpawn();
-        instance.mysteryShip.StartSpawn();
         instance.gameOverUI.SetActive(false);
         UIManager.SetScore(0);
         UIManager.SetLives(instance.player.shipStats.maxLives);
@@ -118,6 +116,9 @@ public sealed class GameManager : MonoBehaviour
     // This resets the invaders grid and bunkers back to default and calls the respawn method
     public static void NewRound()
     {
+        instance.player.StartSpawn();
+        instance.invaders.StartSpawn();
+        instance.mysteryShip.StartSpawn();
         instance.StartCoroutine(instance.CountdownToStart());
         // Increment current wave
         UIManager.SetWave();
@@ -138,21 +139,25 @@ public sealed class GameManager : MonoBehaviour
     // Reset the player back to the default position after dying
     private void Respawn()
     {
-        Vector3 position = instance.player.transform.position;
-        position.x = 0f;
-        instance.player.transform.position = position;
+        instance.player.ResetPlayerPosition();
         instance.player.shipStats.currentHealth = instance.player.shipStats.maxHealth;
         UIManager.SetHealthbar(instance.player.shipStats.currentHealth);
         instance.player.gameObject.SetActive(true);
         if (!roundRespawn) {
             instance.StartCoroutine(instance.player.SpawningGrace());
         }
+        else
+        {
+            instance.StartCoroutine(FlashEffect.EffectAnim(5, 1));
+        }
+
         instance.roundRespawn = false;
     }
 
     // This method controls the behaviour when the player has lost all lives;
     private void GameOver()
     {
+        instance.player.HidePlayerPosition();
         MenuManager.OpenGameOver();
         instance.mysteryShip.FreezeShip();
         AudioManager.StopBattleMusic();
@@ -196,7 +201,7 @@ public sealed class GameManager : MonoBehaviour
     // When an invader is killed, increment the player's score based on the assigned score for that invader
     private void OnInvaderKilled(Invader invader)
     {
-        AudioManager.PlaySoundEffect(enemyDeathSFX);
+        AudioManager.PlaySoundEffect(invaderDeathSFX);
         UIManager.SetScore(invader.score);
 
         AudioManager.UpdateBattleMusicDelay(instance.invaders.invadersAlive);
@@ -212,7 +217,7 @@ public sealed class GameManager : MonoBehaviour
      // When the mystery ship is killed, update the players score accordingly
     private void OnMysteryShipKilled(MysteryShip mysteryShip)
     {
-        AudioManager.PlaySoundEffect(enemyDeathSFX);
+        AudioManager.PlaySoundEffect(mysteryShipSFX);
         UIManager.SetScore(instance.mysteryShip.score);
     }
 

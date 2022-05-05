@@ -6,13 +6,13 @@ public class Invader : MonoBehaviour
     public System.Action<Invader> killed;
 
     // The score awarded for eliminating an invader
-    public int score;
+    public int score { get; private set; }
 
-    public GameObject explosion;
+    [SerializeField] private GameObject explosion;
 
-    public GameObject coinPrefab;
-    public GameObject lifePrefab;
-    public GameObject healthPrefab;
+    [SerializeField] private GameObject coinPrefab;
+    [SerializeField] private GameObject lifePrefab;
+    [SerializeField] private GameObject healthPrefab;
 
     private const int LIFE_CHANCE = 1;
     private const int HEALTH_CHANCE = 10;

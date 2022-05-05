@@ -146,12 +146,12 @@ public class MysteryShip : MonoBehaviour
         // If the game object colliding with the ship is a laser then despawn and kill the ships instane
         if (other.gameObject.layer == LayerMask.NameToLayer("Laser"))
         {
+            Instantiate(explosion, transform.position, Quaternion.identity);
             Despawn();
 
             if (killed != null) 
             {
                 killed.Invoke(this);
-                Instantiate(explosion, transform.position, Quaternion.identity);
             }
         }
     }

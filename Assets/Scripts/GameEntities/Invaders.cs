@@ -121,6 +121,7 @@ public class Invaders : MonoBehaviour
         // Moving row position down 1
         Vector3 position = transform.position;
         position.y -= 1.0f;
+
         transform.position = position;
     }
 

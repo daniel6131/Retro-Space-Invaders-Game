@@ -3,8 +3,9 @@ using TMPro;
 
 public class GameOver : MonoBehaviour
 {
-    public TextMeshProUGUI timerText;
-    [SerializeField] float timer;
+    [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private float timer;
+    
     private bool isRunning;
 
     public static bool Retry()
@@ -18,7 +19,7 @@ public class GameOver : MonoBehaviour
             player.shipStats.currentLives = 1;
             UIManager.SetHealthbar(player.shipStats.currentHealth);
             UIManager.SetLives(player.shipStats.currentLives);
-
+            player.ResetPlayerPosition();
             SaveManager.SaveProgress();
 
             return true;

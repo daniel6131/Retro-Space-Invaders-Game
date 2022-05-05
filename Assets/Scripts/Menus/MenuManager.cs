@@ -103,6 +103,9 @@ public class MenuManager : MonoBehaviour
         instance.gameOverMenu.SetActive(false);
         instance.inGameMenu.SetActive(true);
 
+        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        player.ResetPlayerPosition();
+
         GameManager.GameStart();
     }
 

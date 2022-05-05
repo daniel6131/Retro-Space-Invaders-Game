@@ -6,14 +6,21 @@ public class Player : MonoBehaviour
     // Reference to the player's ship stats
     public ShipStats shipStats;
     
-    [SerializeField] AudioClip shootSFX;
-    [SerializeField] AudioClip healthSFX;
-    [SerializeField] AudioClip lifeSFX;
-    [SerializeField] AudioClip coinSFX;
+    [SerializeField] private AudioClip shootSFX;
+    [SerializeField] private AudioClip healthSFX;
+    [SerializeField] private AudioClip lifeSFX;
+    [SerializeField] private AudioClip coinSFX;
+    [SerializeField] private AudioClip damageSFX;
+    
+    [SerializeField] private FlashEffect flashEffect;
+    [SerializeField] private Color[] colours;
 
     public Projectile laserPrefab;
     public System.Action<bool> killed;
     private bool _laserActive;
+
+    private Vector2 offScreenPos = new Vector2(0, 20f);
+    private Vector2 startPos = new Vector2(0, -13f);
 
     // Bool representing state of initial game killing grace period
     private bool _grace = true;
@@ -78,7 +85,7 @@ public class Player : MonoBehaviour
             transform.position = position;
 
             // Call function to shoot if space key is pressed or left mouse button is clicked
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) 
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0)) && position.y == -13) 
             {
                 StartCoroutine(Shoot());
             }
@@ -136,16 +143,37 @@ public class Player : MonoBehaviour
     // Handles decreasing the health of a player's ship when it has collided with a missile
     private void TakeDamage()
     {
+        AudioManager.PlaySoundEffect(damageSFX);
         shipStats.currentHealth--;
         UIManager.SetHealthbar(shipStats.currentHealth);
 
         // If the ship has no remaining health
         if(shipStats.currentHealth <= 0)
         {
+            transform.position = offScreenPos;
             // Invoke the kill system action killed
             killed(false);
             _laserActive = false;
+        } else
+        {
+            PlayerFlash(0);
         }
+    }
+
+    public void ResetPlayerPosition()
+    {
+        transform.position = startPos;
+    }
+
+    public void HidePlayerPosition()
+    {
+        transform.position = offScreenPos;
+    }
+
+    public void PlayerFlash(int colourIndex)
+    {
+        Color eventColour = colours[colourIndex];
+        flashEffect.Flash(eventColour);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
