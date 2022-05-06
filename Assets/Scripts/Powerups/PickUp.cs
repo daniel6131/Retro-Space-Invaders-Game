@@ -3,7 +3,7 @@ using UnityEngine;
 public abstract class PickUp : MonoBehaviour
 {
     // Speed at which a pickup will fall
-    public float fallSpeed;
+    [SerializeField] private float fallSpeed;
 
     private void Update()
     {

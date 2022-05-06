@@ -26,7 +26,7 @@ public class AchievementsManager : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         achievements = player.achievements;
-        StartCoroutine("achievementQueueCheck");
+        StartCoroutine("AchievementQueueCheck");
     }
 
     public void NotifyAchievementComplete(string ID)
