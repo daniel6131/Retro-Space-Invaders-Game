@@ -9,6 +9,7 @@ public class MenuManager : MonoBehaviour
     public GameObject shopMenu;
     public GameObject inGameMenu;
     public GameObject pauseMenu;
+    public GameObject achievementsMenu;
 
     [SerializeField] AudioClip mainMenuSFX;
     [SerializeField] AudioClip pauseInSFX;
@@ -84,13 +85,25 @@ public class MenuManager : MonoBehaviour
 
     public void OpenShop()
     {
-        instance.StartCoroutine(MenuAnimator.CloseMainMenuAnimation(instance));
+        instance.StartCoroutine(MenuAnimator.CloseMainMenuAnimation(instance, true));
     }
 
     public void CloseShop()
     {
         AudioManager.PlaySoundEffect(mainMenuSFX);
-        instance.StartCoroutine(MenuAnimator.CloseShopMenuAnimation(instance));
+        instance.StartCoroutine(MenuAnimator.CloseShopMenuAnimation(instance, true));
+    }
+
+    public void OpenAchievements()
+    {
+        instance.StartCoroutine(MenuAnimator.CloseMainMenuAnimation(instance, false));
+    }
+
+    public void CloseAchievements()
+    {
+        instance.achievementsMenu.SetActive(false);
+        AudioManager.PlaySoundEffect(mainMenuSFX);
+        instance.StartCoroutine(MenuAnimator.CloseShopMenuAnimation(instance, false));
     }
 
     public void OpenInGame()

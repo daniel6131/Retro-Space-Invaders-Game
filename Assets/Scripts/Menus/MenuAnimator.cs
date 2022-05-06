@@ -5,6 +5,7 @@ public class MenuAnimator : MonoBehaviour
 {
     [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private GameObject shopMenuPanel;
+    [SerializeField] private GameObject achievementsMenuPanel;
 
     public static MenuAnimator instance;
 
@@ -20,7 +21,7 @@ public class MenuAnimator : MonoBehaviour
         }
     }
 
-    public static IEnumerator CloseMainMenuAnimation(MenuManager menuInstance)
+    public static IEnumerator CloseMainMenuAnimation(MenuManager menuInstance, bool isShop)
     {
         if (instance.mainMenuPanel != null)
         {
@@ -34,8 +35,16 @@ public class MenuAnimator : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.5f);
-        menuInstance.shopMenu.SetActive(true);
-        instance.StartCoroutine(OpenShopmenuAnimation(menuInstance));
+        if (isShop)
+        {
+            menuInstance.shopMenu.SetActive(true);
+            instance.StartCoroutine(OpenShopmenuAnimation(menuInstance));
+        }
+        else
+        {
+            menuInstance.achievementsMenu.SetActive(true);
+            instance.StartCoroutine(OpenAchievementsAnimation(menuInstance));
+        }
     }
 
     public static IEnumerator OpenShopmenuAnimation(MenuManager menuInstance)
@@ -54,7 +63,23 @@ public class MenuAnimator : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
     }
 
-    public static IEnumerator CloseShopMenuAnimation(MenuManager menuInstance)
+    public static IEnumerator OpenAchievementsAnimation(MenuManager menuInstance)
+    {
+        if (instance.achievementsMenuPanel != null)
+        {
+            Animator achievementsMenuAnimator = instance.achievementsMenuPanel.GetComponent<Animator>();
+            if (achievementsMenuAnimator != null)
+            {
+                bool achievementIsOpen = achievementsMenuAnimator.GetBool("open");
+
+                achievementsMenuAnimator.SetBool("open", !achievementIsOpen);
+            }
+        }
+
+        yield return new WaitForSeconds(0.5f);
+    }
+
+    public static IEnumerator CloseShopMenuAnimation(MenuManager menuInstance, bool isShop)
     {
         if (instance.shopMenuPanel != null)
         {
@@ -69,10 +94,29 @@ public class MenuAnimator : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
         menuInstance.mainMenu.SetActive(true);
-        instance.StartCoroutine(OpenMainMenuAnimation(menuInstance));
+        instance.StartCoroutine(OpenMainMenuAnimation(menuInstance, isShop));
     }
 
-    public static IEnumerator OpenMainMenuAnimation(MenuManager menuInstance)
+    public static IEnumerator CloseAchievementsMenuAnimation(MenuManager menuInstance, bool isShop)
+    {
+        if (instance.achievementsMenuPanel != null)
+        {
+            Animator achievementsMenuAnimator = instance.achievementsMenuPanel.GetComponent<Animator>();
+            if (achievementsMenuAnimator != null)
+            {
+                bool achievementIsOpen = achievementsMenuAnimator.GetBool("open");
+
+                achievementsMenuAnimator.SetBool("open", !achievementIsOpen);
+            }
+        }
+
+        menuInstance.achievementsMenu.SetActive(false);
+        yield return new WaitForSeconds(0f);
+        menuInstance.mainMenu.SetActive(true);
+        instance.StartCoroutine(OpenMainMenuAnimation(menuInstance, isShop));
+    }
+
+    public static IEnumerator OpenMainMenuAnimation(MenuManager menuInstance, bool isShop)
     {
         if (instance.mainMenuPanel != null)
         {
@@ -86,6 +130,13 @@ public class MenuAnimator : MonoBehaviour
         }
 
         yield return new WaitForSeconds(0.5f);
-        menuInstance.shopMenu.SetActive(false);
+        if (isShop)
+        {
+            menuInstance.shopMenu.SetActive(false);
+        }
+        else
+        {
+            menuInstance.achievementsMenu.SetActive(false);
+        }
     }
 }
