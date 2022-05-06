@@ -42,7 +42,9 @@ public class MenuManager : MonoBehaviour
         instance.inGameMenu.SetActive(false);
     }
 
+    #if UNITY_EDITOR
     [MenuItem("Cheats/OpenGameOver")]
+    #endif
     public static void OpenGameOver()
     {
         Time.timeScale = 0;
