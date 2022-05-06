@@ -4,12 +4,12 @@ using UnityEngine;
 public class Bunker : MonoBehaviour
 {
     // Array storing all the bunker states
-    public Sprite[] states;
+    [SerializeField] private Sprite[] states;
     private int health;
 
     [SerializeField] AudioClip destroySFX;
 
-    public SpriteRenderer spriteRenderer { get; private set; }
+    [SerializeField] public SpriteRenderer spriteRenderer { get; private set; }
 
     // When the bunker experiences a collision, the behaviour depends on the game object it is colliding with;
     private void OnTriggerEnter2D(Collider2D other)

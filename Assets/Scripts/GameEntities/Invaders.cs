@@ -19,10 +19,10 @@ public class Invaders : MonoBehaviour
     private const float START_Y = 3.5f;
     public System.Action<Invader> killed;
 
-    [SerializeField] AudioClip shootSFX;
-    [SerializeField] AudioClip spawnSFX;
+    [SerializeField] private AudioClip shootSFX;
+    [SerializeField] private AudioClip spawnSFX;
 
-    public Projectile missilePrefab;
+    [SerializeField] private Projectile missilePrefab;
     // How often there will be missiles
     public float missileAttackRate = 1.0f;
 

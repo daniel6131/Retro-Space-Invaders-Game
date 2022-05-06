@@ -15,7 +15,7 @@ public sealed class GameManager : MonoBehaviour
     private bool roundRespawn = false;
 
     [SerializeField] private int countdownTime;
-    [SerializeField] Text countdownDisplay;
+    [SerializeField] private Text countdownDisplay;
 
     [SerializeField] private AudioClip playerDeathSFX;
     [SerializeField] private AudioClip invaderDeathSFX;

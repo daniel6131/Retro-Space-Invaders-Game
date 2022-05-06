@@ -11,13 +11,13 @@ public class MenuManager : MonoBehaviour
     public GameObject pauseMenu;
     public GameObject achievementsMenu;
 
-    [SerializeField] AudioClip mainMenuSFX;
-    [SerializeField] AudioClip pauseInSFX;
-    [SerializeField] AudioClip pauseOutSFX;
-    [SerializeField] AudioClip noSale;
-    [SerializeField] AudioClip sale;
+    [SerializeField] private AudioClip mainMenuSFX;
+    [SerializeField] private AudioClip pauseInSFX;
+    [SerializeField] private AudioClip pauseOutSFX;
+    [SerializeField] private AudioClip noSale;
+    [SerializeField] private AudioClip sale;
 
-    public static MenuManager instance;
+    public static MenuManager instance { get; private set; }
 
     private void Awake()
     {
