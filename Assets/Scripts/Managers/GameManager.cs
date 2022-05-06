@@ -31,7 +31,6 @@ public sealed class GameManager : MonoBehaviour
         HideBunkers();
         instance.mysteryShip.gameObject.SetActive(false);
         instance.invaders.gameObject.SetActive(false);
-        HideBunkers();
     }
 
     public static void HideBunkers()
@@ -45,6 +44,7 @@ public sealed class GameManager : MonoBehaviour
     // Each time the scene instantiates:
     public static void GameStart()
     {
+        instance.mysteryShip.gameObject.SetActive(true);
         // The killed variables for each are reset
         instance.player.killed += instance.OnPlayerKilled;
         instance.invaders.killed += instance.OnInvaderKilled;
@@ -162,6 +162,7 @@ public sealed class GameManager : MonoBehaviour
     private void GameOver()
     {
         instance.player.HidePlayerPosition();
+        HideBunkers();
         MenuManager.OpenGameOver();
         instance.mysteryShip.FreezeShip();
         AudioManager.StopBattleMusic();
@@ -216,6 +217,20 @@ public sealed class GameManager : MonoBehaviour
             AudioManager.PlaySoundEffect(waveCompleteSFX);
             NewRound();
         }
+
+        player.aliensKilled++;
+        if (player.aliensKilled >= 1 && player.aliensKilled < 50)
+        {
+            // AchievementsManager.instance.NotifyAchievementComplete("alien_kill_1");
+        }
+        else if (player.aliensKilled >= 50 && player.aliensKilled < 250)
+        {
+            // AchievementsManager.instance.NotifyAchievementComplete("alien_kill_50");
+        }
+        else if (player.aliensKilled >= 250)
+        {
+            // AchievementsManager.instance.NotifyAchievementComplete("alein_kill_250");
+        }
     }
 
      // When the mystery ship is killed, update the players score accordingly
@@ -223,6 +238,20 @@ public sealed class GameManager : MonoBehaviour
     {
         AudioManager.PlaySoundEffect(mysteryShipSFX);
         UIManager.SetScore(instance.mysteryShip.score);
+
+        player.mysteryShipsKilled++;
+        if (player.mysteryShipsKilled >= 1 && player.mysteryShipsKilled < 3)
+        {
+            // AchievementsManager.instance.NotifyAchievementComplete("mysteryShip_kill_1");
+        }
+        else if (player.mysteryShipsKilled >= 3 && player.mysteryShipsKilled < 5)
+        {
+            // AchievementsManager.instance.NotifyAchievementComplete("mysteryShip_kill_3");
+        }
+        else if (player.mysteryShipsKilled >= 5)
+        {
+            // AchievementsManager.instance.NotifyAchievementComplete("mysteryShip_kill_5");
+        }
     }
 
     public static void CancelGame()

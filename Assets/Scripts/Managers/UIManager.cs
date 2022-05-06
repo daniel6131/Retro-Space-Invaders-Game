@@ -1,5 +1,6 @@
 using UnityEngine.UI;
 using UnityEngine;
+using System.Collections;
 using TMPro;
 
 public class UIManager : MonoBehaviour
@@ -12,6 +13,8 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI waveText;
     private int wave;
 
+    [SerializeField] private Text achievement;
+
     // Array to hold the 3 life sprite images
     public Image[] lifeSprites;
     private Color32 active = new Color(1, 1, 1, 1);
@@ -23,7 +26,7 @@ public class UIManager : MonoBehaviour
     public Sprite[] healthBars;
 
     // Current instance of the class
-    private static UIManager instance;
+    public static UIManager instance { get; private set; }
 
     // Upon loading obtain the game objects for all game assets
     private void Awake()
@@ -36,11 +39,29 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        instance.achievement.gameObject.SetActive(false);
+    }
+
     // Method to set the value of the score according to whatever value is passed in
      public static void SetScore(int score)
     {
         instance.score += score;
         instance.scoreText.text = instance.score.ToString().PadLeft(4, '0');
+
+        if (instance.score > 500 && instance.score < 10000)
+        {
+            AchievementsManager.instance.NotifyAchievementComplete("score_500");
+        }
+        else if (instance.score > 1000 && instance.score < 20000)
+        {
+            AchievementsManager.instance.NotifyAchievementComplete("score_1000");
+        }
+        else if (instance.score > 2000)
+        {
+            AchievementsManager.instance.NotifyAchievementComplete("score_2000");
+        }
     }
 
     // Method to set the value of the lives according to whatever is passed in
@@ -57,6 +78,19 @@ public class UIManager : MonoBehaviour
         {
             instance.lifeSprites[i].color = instance.active;
         }
+    }
+
+    public void ShowAchievement(string title)
+    {
+        StartCoroutine(DisplyAchievementInUI(title));
+    }
+
+    private IEnumerator DisplyAchievementInUI(string title)
+    {
+        instance.achievement.text = "ACHIEVEMENT UNLOCKED    :\n" + title;
+        instance.achievement.gameObject.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        instance.achievement.gameObject.SetActive(false);
     }
 
     // Set the healthbar sprite to be that which represents the health value passed in

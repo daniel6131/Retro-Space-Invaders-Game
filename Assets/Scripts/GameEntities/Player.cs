@@ -1,10 +1,14 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     // Reference to the player's ship stats
     public ShipStats shipStats;
+    public List<string> achievements;
+    public int aliensKilled;
+    public int mysteryShipsKilled;
     
     [SerializeField] private AudioClip shootSFX;
     [SerializeField] private AudioClip healthSFX;
